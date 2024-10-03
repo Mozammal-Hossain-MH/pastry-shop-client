@@ -13,5 +13,25 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        lighttheme: {
+          primary: "#C19F5F", // White as primary
+          secondary: "#f6f6f6", // Light gray for secondary elements
+          accent: "#e5e7eb", // Another light shade for accents
+          neutral: "#f9fafb", // Neutral background
+          "base-100": "#0B0A0B", // Base background color
+          "base-300": "#ffffff", // Base background color
+          info: "#d1d5db", // Light info
+          success: "#34d399", // Light green for success
+          warning: "#fbbf24", // Light yellow for warning
+          error: "#f87171", // Light red for error
+        },
+      },
+    ],
+    // Set the default theme
+    defaultTheme: "lighttheme",
+  },
 };
