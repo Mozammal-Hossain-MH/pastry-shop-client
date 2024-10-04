@@ -4,6 +4,7 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/Shared/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -23,6 +24,7 @@ module.exports = {
           accent: "#e5e7eb", // Another light shade for accents
           neutral: "#f9fafb", // Neutral background
           "base-100": "#0B0A0B", // Base background color
+          "base-200": "#6F6E6F", // Base background color
           "base-300": "#ffffff", // Base background color
           info: "#d1d5db", // Light info
           success: "#34d399", // Light green for success
