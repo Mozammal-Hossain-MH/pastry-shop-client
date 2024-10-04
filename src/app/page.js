@@ -9,32 +9,28 @@ export default function Home() {
     {
       id: 1,
       name: "Milk Chocolate With Peanuts",
-      image:
-        "http://crems.like-themes.com/wp-content/uploads/2019/06/shop-06.png",
+      image: "/vanilla.png",
       regularPrice: 42.49,
       offerPrice: null,
     },
     {
       id: 2,
       name: "Milk Chocolate With Peanuts",
-      image:
-        "http://crems.like-themes.com/wp-content/uploads/2019/06/shop-06.png",
+      image: "/vanilla.png",
       regularPrice: 13.49,
       offerPrice: null,
     },
     {
       id: 3,
       name: "Milk Chocolate With Peanuts",
-      image:
-        "http://crems.like-themes.com/wp-content/uploads/2019/06/shop-06.png",
+      image: "/vanilla.png",
       regularPrice: 25.49,
       offerPrice: null,
     },
     {
       id: 4,
       name: "Milk Chocolate With Peanuts",
-      image:
-        "http://crems.like-themes.com/wp-content/uploads/2019/06/shop-06.png",
+      image: "/vanilla.png",
       regularPrice: 12.99,
       offerPrice: 11.49,
     },
