@@ -5,7 +5,7 @@ const Navbar = () => {
     <div className="w-full h-24">
       Navbar
       <div className={`w-[calc(100%-120px)] `}>
-        <div className={` wavy-line mx-[60px]`}></div>
+        <div className={`wavy-line-nav mx-[60px]`}></div>
       </div>
     </div>
   );

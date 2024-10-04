@@ -1,19 +1,17 @@
 "use client";
 import React from "react";
 
-const FixedBgComponent = () => {
+const FixedBgComponent = ({ component }) => {
   return (
-    <div className="featured-item bg-fixed">
-      egfvd
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
-      <div className="relative z-10 h-[600px]">edfg</div>
+    <div
+      style={{
+        backgroundImage: "url('/chocolate.jpg')",
+        backgroundPosition: "50% 50%",
+        backgroundSize: "150%",
+      }}
+      className="bg-fixed bg-center bg-no-repeat bg-cover"
+    >
+      <div className="bg-base-100 bg-opacity-60 py-40">{component}</div>
     </div>
   );
 };

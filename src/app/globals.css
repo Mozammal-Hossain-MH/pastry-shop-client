@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 /* HTML: <div class="wavy-line"></div> */
-.wavy-line {
+.wavy-line-nav {
   --s: 10px; /* size of the wave */
   --b: 1px; /* thickness of the line */
   --m: 1.7; /* curvature of the wave [0 2] */
@@ -28,8 +28,26 @@
       50% calc(50% + var(--s) / 2 + var(--b) / 2) / calc(4 * var(--s))
       calc(var(--s) + var(--b)) repeat-x;
 }
+.wavy-line-heading {
+  --s: 4px; /* size of the wave */
+  --b: 1px; /* thickness of the line */
+  --m: 1.5; /* curvature of the wave [0 2] */
 
-.featured-item {
-  background-image: url("https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-  background-size: cover;
+  background: #c19f5f;
+  --R: calc(var(--s) * sqrt(var(--m) * var(--m) + 1) + var(--b) / 2);
+  height: calc(2 * var(--R));
+  width: 100%;
+  --_g: #0000 calc(99% - var(--b)), #000 calc(101% - var(--b)) 99%, #0000 101%;
+  mask: radial-gradient(
+        var(--R) at left 50% bottom calc(-1 * var(--m) * var(--s)),
+        var(--_g)
+      )
+      calc(50% - 2 * var(--s)) calc(50% - var(--s) / 2 - var(--b) / 2) /
+      calc(4 * var(--s)) calc(var(--s) + var(--b)) repeat-x,
+    radial-gradient(
+        var(--R) at left 50% top calc(-1 * var(--m) * var(--s)),
+        var(--_g)
+      )
+      50% calc(50% + var(--s) / 2 + var(--b) / 2) / calc(4 * var(--s))
+      calc(var(--s) + var(--b)) repeat-x;
 }

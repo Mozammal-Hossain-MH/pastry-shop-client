@@ -66,13 +66,22 @@ export default function Home() {
         borderWidth={2}
         borderClr={"#000"}
       />
-      <FixedBgComponent />
-      <div>
+      <FixedBgComponent
+        component={
+          <h1 className="text-3xl md:text-6xl font-bold text-base-300 space-y-5 text-center">
+            <p>Made with love</p>{" "}
+            <p>
+              <span className="text-primary">unique sweets</span> for gourmet
+            </p>
+          </h1>
+        }
+      />
+      <div className="space-y-10">
         <Heading
           subHeading={"Online Store"}
           heading={"Discover Sweet Delicious"}
         />
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products?.map((product) => (
             <ProductCard key={product?.id} product={product} />
           ))}
