@@ -27,6 +27,10 @@
   }
 }
 
+.rotating-square {
+  animation: rotate 30s linear infinite;
+}
+
 .rotating-background img {
   position: relative;
   z-index: 1;
@@ -46,4 +50,20 @@
 
 .image-hover:hover .jump-image {
   animation: jump 0.7s ease;
+}
+
+@keyframes upToDown {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@media (min-width: 768px) {
+  .image-hover:hover .cart-button {
+    animation: upToDown 0.7s ease;
+  }
 }

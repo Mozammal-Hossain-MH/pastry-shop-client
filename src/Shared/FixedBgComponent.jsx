@@ -6,10 +6,9 @@ const FixedBgComponent = ({ component }) => {
     <div
       style={{
         backgroundImage: "url('/chocolate.jpg')",
-        backgroundPosition: "50% 50%",
-        backgroundSize: "150%",
+        backgroundSize: "200%",
       }}
-      className="bg-fixed bg-center bg-no-repeat bg-cover"
+      className="bg-fixed bg-center bg-repeat bg-cover"
     >
       <div className="bg-base-100 bg-opacity-60 py-40">{component}</div>
     </div>
