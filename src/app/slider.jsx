@@ -96,13 +96,13 @@ const Slider = ({
         <>
           <button
             onClick={prev}
-            className="absolute z-10 top-1/2 left-2 px-4 py-1 rounded-full shadow text-4xl bg-white/50 text-gray-700 transition-all hover:bg-white/30 hover:scale-110 active:scale-90"
+            className="absolute top-1/2 left-2 px-4 py-1 rounded-full shadow text-4xl bg-white/50 text-gray-700 transition-all hover:bg-white/30 hover:scale-110 active:scale-90"
           >
             <span>&#10094;</span>
           </button>
           <button
             onClick={next}
-            className="absolute z-10 top-1/2 right-2 px-4 py-1 rounded-full shadow text-4xl bg-white/50 text-gray-700 transition-all hover:bg-white/30 hover:scale-110 active:scale-90"
+            className="absolute top-1/2 right-2 px-4 py-1 rounded-full shadow text-4xl bg-white/50 text-gray-700 transition-all hover:bg-white/30 hover:scale-110 active:scale-90"
           >
             <span>&#10095;</span>
           </button>

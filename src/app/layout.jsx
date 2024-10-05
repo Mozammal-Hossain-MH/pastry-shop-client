@@ -1,6 +1,7 @@
+import ProjectProvider from "@/Context/ProjectProvider";
+import Navbar from "@/Shared/Navbar";
 import { Cormorant } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/Shared/Navbar";
 
 const cormorant = Cormorant({ subsets: ["latin"] });
 
@@ -13,10 +14,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${cormorant.className} antialiased relative`}>
-        <div className="absolute top-0 left-0 right-0 z-10">
-          <Navbar />
-        </div>
-        <div className="">{children}</div>
+        <ProjectProvider>
+          <div className="absolute top-0 left-0 right-0 z-10">
+            <Navbar />
+          </div>
+          <div className="">{children}</div>
+        </ProjectProvider>
       </body>
     </html>
   );
