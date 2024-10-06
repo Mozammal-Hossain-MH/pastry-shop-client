@@ -1,8 +1,15 @@
 import { IoIosArrowRoundForward } from "react-icons/io";
-const Button = ({ text, icon = true, paddings = "px-5 py-3", isLoading }) => {
+const Button = ({
+  text,
+  icon = true,
+  paddings = "px-5 py-3",
+  handler,
+  isLoading,
+}) => {
   return (
     <div className="inline-block group">
       <button
+        onClick={handler}
         className={`text-primary border border-primary ${paddings} rounded-full flex items-center gap-2 group-hover:border-base-300 transition-[border]`}
       >
         <p className="group-hover:text-base-300 transition-[color] duration-700">

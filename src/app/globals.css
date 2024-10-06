@@ -10,7 +10,7 @@
   --b: 1px; /* thickness of the line */
   --m: 1.7; /* curvature of the wave [0 2] */
 
-  background: #6f6e6f;
+  background: #262626;
   --R: calc(var(--s) * sqrt(var(--m) * var(--m) + 1) + var(--b) / 2);
   height: calc(2 * var(--R));
   width: 100%;

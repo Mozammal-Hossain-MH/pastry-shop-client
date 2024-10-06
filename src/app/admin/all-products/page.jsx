@@ -8,7 +8,7 @@ import { RiEdit2Fill } from "react-icons/ri";
 import Swal from "sweetalert2";
 // import { deleteProduct } from "../../../Apis/products";
 // import useRandomProducts from "../../../Hooks/useRandomProducts";
-import { useAuthContext } from "@/Context/ProjectProvider";
+import { useAuthContext, usePopupContext } from "@/Context/ProjectProvider";
 import CustomLoading from "@/Shared/CustomLoading";
 import CustomToaster from "@/Shared/CustomToaster";
 import { Pagination } from "@/Shared/Pagination";
@@ -22,7 +22,8 @@ import Button from "@/Shared/Button";
 
 const page = () => {
   const navigate = useRouter();
-  const { unauthorizedLogout, popupOption, setPopupOption } = useAuthContext();
+  const { unauthorizedLogout } = useAuthContext();
+  const { popupOption, setPopupOption } = usePopupContext();
 
   // ALL SELECTED IDs
   const [selectedIds, setSelectedIds] = useState([]);
@@ -96,7 +97,7 @@ const page = () => {
     setPopupOption({
       ...popupOption,
       open: true,
-      type: "addProduct",
+      type: "product",
       title: "Edit Product",
       refetch: refetch,
       id: id,
@@ -206,7 +207,18 @@ const page = () => {
             Total {data?.total} {data?.total > 1 ? "Products" : "Product"} Found
           </p>
         </div>
-        <Button text={"Add"} />
+        <Button
+          text={"Add"}
+          handler={() =>
+            setPopupOption({
+              ...popupOption,
+              open: true,
+              type: "product",
+              title: "Add New Product",
+              refetch: refetch,
+            })
+          }
+        />
         {/* <button
           onClick={() =>
             setPopupOption({
