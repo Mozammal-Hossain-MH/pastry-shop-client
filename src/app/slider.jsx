@@ -1,6 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import {
+  IoArrowBackOutline,
+  IoArrowForwardOutline,
+  IoArrowForwardSharp,
+} from "react-icons/io5";
 
 const Slider = ({
   img,
@@ -31,7 +36,7 @@ const Slider = ({
 
   const slideVariants = {
     initial: {
-      scale: 0.8,
+      scale: 0.9,
       opacity: 1,
     },
     animate: {
@@ -39,16 +44,16 @@ const Slider = ({
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeIn",
-        delay: 0.3,
+        delay: 0, // Reduced delay for better responsiveness
+        ease: [0.42, 0, 0.58, 1], // Custom easing for a smoother curve (ease-in-out)
       },
     },
     exit: {
-      scale: 1.3,
-      opacity: 0.5,
+      scale: 1.5, // Reduced scale change for a softer exit
+      opacity: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeIn",
+        duration: 0.5, // Shorter exit duration for snappy exits
+        ease: [0.42, 0, 0.58, 1], // Consistent easing
       },
     },
   };
@@ -68,6 +73,7 @@ const Slider = ({
             backgroundImage: `url(${img[curr]})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            backgroondRepeat: "no-repeat",
           }}
         >
           <motion.div
@@ -96,15 +102,16 @@ const Slider = ({
         <>
           <button
             onClick={prev}
-            className="absolute top-1/2 left-2 px-4 py-1 rounded-full shadow text-4xl bg-white/50 text-gray-700 transition-all hover:bg-white/30 hover:scale-110 active:scale-90"
+            className="absolute top-1/2 left-2 rounded-full shadow text-4xl hover:text-primary text-base-300 transition-all active:scale-90"
           >
-            <span>&#10094;</span>
+            <IoArrowBackOutline className={`text-[1.7rem]`} />
           </button>
+
           <button
             onClick={next}
-            className="absolute top-1/2 right-2 px-4 py-1 rounded-full shadow text-4xl bg-white/50 text-gray-700 transition-all hover:bg-white/30 hover:scale-110 active:scale-90"
+            className="absolute top-1/2 right-2 rounded-full shadow text-4xl hover:text-primary text-base-300 transition-all active:scale-90"
           >
-            <span>&#10095;</span>
+            <IoArrowForwardOutline className={`text-[1.7rem]`} />
           </button>
         </>
       )}

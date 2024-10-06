@@ -98,11 +98,15 @@ export default function Home() {
     },
     {
       id: 2,
-      image: "/dairyMilk.jpg",
+      image: "/cake.jpg",
     },
     {
       id: 3,
-      image: "/chocolate.jpg",
+      image: "/cherry.jpg",
+    },
+    {
+      id: 4,
+      image: "/candy.jpg",
     },
   ];
   const slides = images?.map((image) => image?.image);
