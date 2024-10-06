@@ -14,6 +14,7 @@ const Navbar = () => {
   const [currentTab, setCurrentTab] = useState("login");
   // const { data } = useCart(user?.email);
   const [isExpanded, setIsExpanded] = useState("");
+  const [openDropdown, seOpenDropdown] = useState(false);
 
   const handleLogin = () => {
     setLogin(true);
@@ -30,7 +31,7 @@ const Navbar = () => {
   };
 
   const handleOpenDropdown = () => {
-    setOpenDropDown(!openDropdown);
+    seOpenDropdown(!openDropdown);
   };
 
   const menus = [
@@ -72,45 +73,17 @@ const Navbar = () => {
     },
     {
       id: 4,
-      name: "Admin Dashboard",
+      name: "Admin Panel",
       // Icon: <LayoutDashboard className="h-4 w-4" />,
       handler: handleOpenDropdown,
-      path: "/admin-dashboard",
+      path: "/admin",
       permission: true,
       Children: [
         {
-          id: 3,
-          name: "Admin Analytics",
-          path: "/admin-dashboard/admin-analytics",
-          // Icon: <ChartColumn className="h-4 w-4" />,
-          handler: handleCloseMenu,
-        },
-        {
           id: 1,
           name: "Products",
-          path: "/admin-dashboard/products",
+          path: "/admin/all-products",
           // Icon: <Tag className="h-4 w-4" />,
-          handler: handleCloseMenu,
-        },
-        {
-          id: 2,
-          name: "All Orders",
-          path: "/admin-dashboard/all-orders",
-          // Icon: <BringToFront className="h-4 w-4" />,
-          handler: handleCloseMenu,
-        },
-        {
-          id: 4,
-          name: "All Users",
-          path: "/admin-dashboard/all-users",
-          // Icon: <Users className="h-4 w-4" />,
-          handler: handleCloseMenu,
-        },
-        {
-          id: 5,
-          name: "Messages",
-          path: "/admin-dashboard/messages",
-          // Icon: <MessageSquare className="h-4 w-4" />,
           handler: handleCloseMenu,
         },
       ],
@@ -170,19 +143,25 @@ const Navbar = () => {
                 menu?.permission ? (
                   menu?.Children?.length > 0 ? (
                     <NavItemWithChildren
+                      key={i}
                       icon={menu?.Icon}
                       label={menu?.name}
                       isExpanded={isExpanded}
                       setIsExpanded={setIsExpanded}
                     >
                       {menu?.Children?.map((menu, i) => (
-                        <NavItemForDesktop icon={menu?.Icon} href={menu?.path}>
+                        <NavItemForDesktop
+                          key={i}
+                          icon={menu?.Icon}
+                          href={menu?.path}
+                        >
                           {menu?.name}
                         </NavItemForDesktop>
                       ))}
                     </NavItemWithChildren>
                   ) : (
                     <NavItemForDesktop
+                      key={i}
                       icon={menu?.Icon}
                       href={menu?.path}
                       handler={menu?.handler}
@@ -249,6 +228,7 @@ const Navbar = () => {
                         >
                           {menu?.Children?.map((menu, i) => (
                             <NavItem
+                              key={i}
                               icon={menu?.Icon}
                               href={menu?.path}
                               handler={menu?.handler}

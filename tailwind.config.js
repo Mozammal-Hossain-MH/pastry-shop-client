@@ -21,6 +21,7 @@ module.exports = {
         lighttheme: {
           primary: "#C19F5F", // White as primary
           secondary: "#f6f6f6", // Light gray for secondary elements
+          "primary-content": "#F0E5C1",
           accent: "#e5e7eb", // Another light shade for accents
           neutral: "#f9fafb", // Neutral background
           "base-100": "#0B0A0B", // Base background color
