@@ -95,7 +95,7 @@ export default function CustomFieldForArray({
           placeholder={`${placeholder}${
             required ? (taskField ? "" : "*") : ""
           }`}
-          className={`input bg-primary
+          className={`input bg-base-300
 
         ${
           disable &&

@@ -11,28 +11,43 @@ import toast from "react-hot-toast";
 //   uploadProductPic,
 // } from "../../../Apis/products";
 import CustomField from "@/Shared/Fields/CustomField";
-import CustomFieldForArray from "@/Shared/Fields/CustomFieldForArray";
 import CustomFileUploader from "@/Shared/Fields/CustomFileUploader";
 import CustomMultiSelect from "@/Shared/Fields/CustomMultiSelect";
+import CustomNumberField from "@/Shared/Fields/CustomNumberField";
 import CustomTextareaField from "@/Shared/Fields/CustomTextAreaField";
+import { uploadProductPic } from "@/apis/products";
 
 const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
+    inStock: "",
     category: "",
-    features: [""],
-    specifications: [""],
-    speciality: "",
     description: "",
     images: [],
   });
+  const [filesToUpload, setFilesToUpload] = useState([]);
+  const [localImage, setLocalImage] = useState([]);
+  console.log({ formData, localImage, filesToUpload });
   const { unauthorizedLogout } = useAuthContext();
   const { data: categories, isPending } = useAuthContext();
-  const options = categories?.map((category, i) => ({
-    id: i + 1,
-    label: category?.name,
-  }));
+  const options = [
+    {
+      id: 1,
+      name: "Chocolate",
+      label: "chocolate",
+    },
+    {
+      id: 2,
+      name: "Milk",
+      label: "milk",
+    },
+    {
+      id: 3,
+      name: "Honey",
+      label: "honey",
+    },
+  ];
 
   const [isProductLoading, setIsProductLoading] = useState(false);
 
@@ -69,8 +84,18 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
       newErrors.name = "Name is required";
     }
     // VALIDATE PRICE
-    if (!formData.price === "") {
+    if (!formData.price) {
       newErrors.price = "Price is required";
+    }
+    if (formData.price < 0) {
+      newErrors.price = "Price cannot be negative";
+    }
+    // VALIDATE STOCK
+    if (!formData.inStock) {
+      newErrors.inStock = "Stock is required";
+    }
+    if (formData.inStock < 0) {
+      newErrors.inStock = "Stock cannot be negative";
     }
 
     //   VALIDATE CATEGORY
@@ -79,12 +104,12 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
     }
 
     // VALIDATE IMAGES
-    if (formData.images.length <= 0) {
+    if (localImage.length <= 0) {
       newErrors.image = "At least one image is required";
     }
 
     setErrors(newErrors);
-
+    console.log({ newErrors });
     // ValidationErrorHandler(newErrors);
     if (Object.keys(newErrors).length > 0) {
       toast.custom((t) => (
@@ -121,27 +146,38 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
     }));
   };
 
-  const handleFormArrayChange = (e) => {
-    const { name, value } = e.target;
-    const formName = name?.split("_")[0];
-    const formIndex = parseInt(name?.split("_")[1], 10);
+  // const handleFormArrayChange = (e) => {
+  //   const { name, value } = e.target;
+  //   const formName = name?.split("_")[0];
+  //   const formIndex = parseInt(name?.split("_")[1], 10);
 
-    const updatedArray = [...formData[formName]];
-    updatedArray[formIndex] = value;
+  //   const updatedArray = [...formData[formName]];
+  //   updatedArray[formIndex] = value;
 
-    setFormData((prev) => ({
-      ...prev,
-      [formName]: updatedArray,
-    }));
-  };
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [formName]: updatedArray,
+  //   }));
+  // };
 
   const [filesUploading, setFilesUploading] = useState(false);
   const handleFileUpload = async (files) => {
     const fileArray = Array.from(files);
 
+    setLocalImage((prev) => [
+      ...prev,
+      ...fileArray.map((file) => ({
+        localImg: URL.createObjectURL(file),
+      })),
+    ]);
+    setFilesToUpload([...filesToUpload, ...fileArray]);
+  };
+
+  const fileUploadToServer = async (files) => {
+    console.log({ files });
     const validFiles = [];
 
-    for (const file of fileArray) {
+    for (const file of files) {
       if (file.size > 5 * 1024 * 1024) {
         // File size exceeds 5MB, show error message
         toast.custom((t) => (
@@ -158,17 +194,37 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
 
     if (validFiles.length > 0) {
       setFilesUploading(true);
-      uploadProductPic(validFiles)
-        .then((res) => {
+      try {
+        const res = await uploadProductPic(validFiles); // Await the result here
+        if (res?.length > 0) {
+          setFilesToUpload([]);
           setFormData((prev) => ({
             ...prev,
-            images: [...prev.images, ...res],
+            images: [...prev?.images, ...res],
           }));
           setFilesUploading(false);
-        })
-        .catch((error) => {
-          setFilesUploading(false);
-        });
+          return res; // Return the response here
+        }
+      } catch (error) {
+        setFilesUploading(false);
+        throw error; // Optional: propagate error if needed
+      }
+    }
+  };
+
+  //   SUBMIT DATA
+  const handleSubmit = async () => {
+    // Validate form
+    if (validateForm()) {
+      if (popupOption?.id) {
+        updateFunction(formData);
+      } else {
+        const res = await fileUploadToServer(filesToUpload);
+        console.log({ res });
+        if (res?.length > 0) {
+          createFunction(formData);
+        }
+      }
     }
   };
 
@@ -248,18 +304,6 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
       });
   };
 
-  //   SUBMIT DATA
-  const handleSubmit = async () => {
-    // Validate form
-    if (await validateForm()) {
-      if (popupOption?.id) {
-        updateFunction(formData);
-      } else {
-        createFunction(formData);
-      }
-    }
-  };
-
   if (isProductCreating || isProductLoading) {
     return <CustomLoading />;
   }
@@ -282,7 +326,7 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
           required={true}
         />
         {/* PRICE */}
-        <CustomField
+        <CustomNumberField
           defaultValue={formData?.price}
           disable={false}
           fieldClassName={"w-full"}
@@ -292,10 +336,25 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
           name={"price"}
           onChange={handleFormChange}
           placeholder={"Price"}
-          type={"number"}
           wrapperClassName={"w-full"}
           required={true}
         />
+
+        {/* STOCK */}
+        <CustomNumberField
+          defaultValue={formData?.inStock}
+          disable={false}
+          fieldClassName={"w-full"}
+          error={errors?.inStock}
+          id={"inStock"}
+          label={"Stock"}
+          name={"inStock"}
+          onChange={handleFormChange}
+          placeholder={"Stock"}
+          wrapperClassName={"w-full"}
+          required={true}
+        />
+
         {/* CATEGORY */}
         <CustomMultiSelect
           disable={false}
@@ -310,84 +369,8 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
           }}
           options={options}
           singleSelect
+          error={errors?.category}
         />
-
-        {/* FEATURES */}
-        <div className={`flex flex-col gap-2`}>
-          {formData?.features?.map((field, i) => (
-            <div key={i} className={`flex items-end gap-6`}>
-              <CustomFieldForArray
-                value={formData?.features[i]}
-                array={formData?.features}
-                setFormData={setFormData}
-                disable={false}
-                fieldClassName={"w-full"}
-                error={errors?.features}
-                id={`feature${i}`}
-                label={`${i === 0 ? "Features" : ""}`}
-                name={`features_${i}`}
-                onChange={handleFormArrayChange}
-                placeholder={`Feature ${i + 1}`}
-                type={"text"}
-                wrapperClassName={"w-full"}
-              />
-              {formData?.features?.length - 1 === i ? (
-                <button
-                  onClick={() =>
-                    setFormData({
-                      ...formData,
-                      features: [...formData?.features, ""],
-                    })
-                  }
-                  className={`flex justify-center items-center gap-1 px-6 py-3 text-heading-secondary bg-btn-primary rounded-[5px] font-bold transition-transform hover:scale-105 active:scale-95`}
-                >
-                  <span>Add</span>
-                  <span>More</span>
-                </button>
-              ) : (
-                ""
-              )}
-            </div>
-          ))}
-        </div>
-        {/* SPECIFICATIONS */}
-        <div className={`flex flex-col gap-2`}>
-          {formData?.specifications?.map((field, i) => (
-            <div key={i} className={`flex items-end gap-6`}>
-              <CustomFieldForArray
-                value={formData?.specifications[i]}
-                array={formData?.specifications}
-                setFormData={setFormData}
-                disable={false}
-                fieldClassName={"w-full"}
-                error={errors?.specifications}
-                id={`specification${i}`}
-                label={`${i === 0 ? "Specifications" : ""}`}
-                name={`specifications_${i}`}
-                onChange={handleFormArrayChange}
-                placeholder={`Specification ${i + 1}`}
-                type={"text"}
-                wrapperClassName={"w-full"}
-              />
-              {formData?.specifications?.length - 1 === i ? (
-                <button
-                  onClick={() =>
-                    setFormData({
-                      ...formData,
-                      specifications: [...formData?.specifications, ""],
-                    })
-                  }
-                  className={`flex justify-center items-center gap-1 px-6 py-3 text-heading-secondary bg-btn-primary rounded-[5px] font-bold transition-transform hover:scale-105 active:scale-95`}
-                >
-                  <span>Add</span>
-                  <span>More</span>
-                </button>
-              ) : (
-                ""
-              )}
-            </div>
-          ))}
-        </div>
 
         {/* DESCRIPTION */}
         <CustomTextareaField
@@ -406,19 +389,17 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
         <CustomFileUploader
           details={`Allowed .png, .jpg, .jpeg, .pdf files under 5MB`}
           accept={".png, .jpg, .jpeg, .pdf"}
-          files={formData?.images}
+          files={localImage?.map((file) => file?.localImg)}
           fileFolder={"product"}
           // isFileUploading={filesUploaderQuery.isPending}
           onFileSelect={async (e) => handleFileUpload(e)}
           onDrop={(files) => handleFileUpload(files)}
           onRemove={(e) => {
-            setFormData({
-              ...formData,
-              images: [...formData?.images].filter(
-                (file_url) => file_url !== e
-              ),
-            });
+            setLocalImage((prev) =>
+              prev?.filter((file) => file?.localImg !== e)
+            );
           }}
+          required
         />
       </div>
       <div className="flex flex-col md:flex-row w-full justify-center md:justify-end items-center py-5 gap-2">

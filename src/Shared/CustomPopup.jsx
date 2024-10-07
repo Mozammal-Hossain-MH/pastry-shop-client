@@ -21,7 +21,7 @@ export default function CustomPopup({
       className="relative overflow-hidden w-1/2 rounded-xl pop"
     >
       <div
-        className={`relative  bg-primary shadow-xl rounded-xl border-primary-content border-2 overflow-hidden w-[95vw] sm:w-[70vw] md:w-[70vw] lg:w-[50vw] ${popupClasses} max-h-[90vh] `}
+        className={`relative  bg-base-300 text-base-100 shadow-xl rounded-xl border-primary-content border-2 overflow-hidden w-[95vw] sm:w-[70vw] md:w-[70vw] lg:w-[50vw] ${popupClasses} max-h-[90vh] `}
       >
         {/* {!closeButtonHidden ? ( */}
         <button
@@ -32,7 +32,7 @@ export default function CustomPopup({
             });
             setIsOpen && setIsOpen(false);
           }}
-          className="absolute z-[1000] top-3 right-3 w-9 h-9 rounded-full bg-error flex justify-center items-center"
+          className="absolute z-[1000] top-3 right-3 w-9 h-9 rounded-full bg-base-300 flex justify-center items-center"
         >
           <FiX className="text-primary text-xl" />
         </button>
@@ -41,7 +41,7 @@ export default function CustomPopup({
         )} */}
 
         {popupOption?.title && (
-          <div className="w-full px-8 py-5 text-body font-semibold text-2xl absolute top-0 z-[999] bg-primary">
+          <div className="w-full px-8 py-5 text-body font-semibold text-2xl absolute top-0 z-[999] bg-primary text-base-300">
             {popupOption?.title}
           </div>
         )}

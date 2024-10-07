@@ -2,6 +2,7 @@ import ProjectProvider from "@/Context/ProjectProvider";
 import Navbar from "@/Shared/Navbar";
 import { Cormorant } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const cormorant = Cormorant({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
             <Navbar />
           </div>
           <div className="">{children}</div>
+          <Toaster position="top-right" />
         </ProjectProvider>
       </body>
     </html>

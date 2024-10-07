@@ -20,6 +20,7 @@ export default function CustomFileUploader({
   isFileUploading = false,
   onRemove = (event) => event,
   onDrop = (event) => event,
+  required,
 }) {
   const [dragOver, setDragOver] = useState(false);
 
@@ -108,7 +109,10 @@ export default function CustomFileUploader({
         }
       />
 
-      <p className="text-sm font-semibold mb-2">Attachment</p>
+      <p className="text-sm font-semibold mb-2">
+        Attachment{" "}
+        {required && <span className="text-error font-bold text-md">*</span>}
+      </p>
       <div className="bg-base-300 border border-primary-content shadow-md rounded-xl pb-4">
         <div className="px-5 py-2 flex items-star md:items-center justify-start gap-2">
           <div className="border rounded-full border-gray-500 h-8 w-8 md:h-10 md:w-10 flex justify-center items-center">
@@ -197,8 +201,10 @@ export default function CustomFileUploader({
                             />
                           ) : (
                             <div className="h-full w-full duration-200 absolute top-0 cursor-pointer  rounded-xl  right-0 object-cover group-hover:opacity-20 flex justify-center items-center">
-                              <FaRegFileLines
-                                className={`text-4xl text-primary`}
+                              <img
+                                src={file}
+                                alt={file.name}
+                                className="h-full w-full duration-200 absolute top-0 cursor-pointer  rounded-xl  right-0 object-cover group-hover:opacity-20"
                               />
                             </div>
                           )}
