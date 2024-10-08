@@ -211,7 +211,7 @@ export default function CustomMultiSelect({
         }
         w-full input ${
           isOptionOpen ? "border-2 border-primary" : ""
-        }  flex-wrap rounded-md bg-base-300 input-bordered outline-none focus:outline-none items-center px-1`}
+        }  flex-wrap rounded-md bg-secondary input-bordered outline-none focus:outline-none items-center px-1`}
         data-auto={dataAuto}
       >
         {/* SELECTED OPTIONS  */}
@@ -297,7 +297,7 @@ export default function CustomMultiSelect({
                 value={searchFieldValue}
                 onChange={handleSearch}
                 placeholder="Search"
-                className={`w-full input-bordered cursor-not-allowed outline-none bg-transparent px-2 h-full`}
+                className={`w-full text-base-300 input-bordered cursor-not-allowed outline-none bg-transparent px-2 h-full`}
               />
             )}
           </div>
@@ -311,7 +311,7 @@ export default function CustomMultiSelect({
               singleSelect && selectedValues?.length > 0
                 ? "h-[0.26rem]"
                 : "h-11"
-            } items-center text-gray-600`}
+            } items-center text-base-300`}
           >
             {singleSelect ? (
               <>
@@ -352,7 +352,7 @@ export default function CustomMultiSelect({
       <OutsideClickHandler
         className={`absolute ${
           top ? "bottom-full -mb-7" : "top-full mt-2"
-        } z-30 bg-base-300 duration-200 transition-all overflow-hidden  ${
+        } z-30 bg-secondary text-base-300 duration-200 transition-all overflow-hidden  ${
           isOptionOpen ? "opacity-100 h-auto block" : "opacity-0 h-0 hidden"
         }  shadow-lg border-2 border-primary rounded-md w-full left-0`}
         onOutsideClick={() => {

@@ -1,5 +1,6 @@
 const Heading = ({
   isSubHeading = true,
+  isWave = true,
   subHeading,
   heading,
   headingClass = " text-base-300",
@@ -14,9 +15,11 @@ const Heading = ({
       <h2 className={`text-2xl md:text-4xl font-bold ${headingClass}`}>
         {heading}
       </h2>
-      <div className={`w-[100px] `}>
-        <div className={`wavy-line-heading`}></div>
-      </div>
+      {isWave && (
+        <div className={`w-[100px] `}>
+          <div className={`wavy-line-heading`}></div>
+        </div>
+      )}
     </div>
   );
 };

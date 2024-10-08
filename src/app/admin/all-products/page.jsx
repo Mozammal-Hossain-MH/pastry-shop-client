@@ -1,32 +1,31 @@
 "use client";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { AiFillEye } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
-import { RiEdit2Fill } from "react-icons/ri";
-import Swal from "sweetalert2";
-// import { deleteProduct } from "../../../Apis/products";
-// import useRandomProducts from "../../../Hooks/useRandomProducts";
-import { useAuthContext, usePopupContext } from "@/Context/ProjectProvider";
+import { deleteProduct, getAllProducts } from "@/apis/products";
+import { usePopupContext } from "@/Context/ProjectProvider";
+import Button from "@/Shared/Button";
 import CustomLoading from "@/Shared/CustomLoading";
-import CustomToaster from "@/Shared/CustomToaster";
+import Heading from "@/Shared/Heading";
 import { Pagination } from "@/Shared/Pagination";
 import SplitDescription from "@/Shared/SplitDescription";
 import Table from "@/Shared/Table";
+import TableComponentHeading from "@/Shared/TableComponentHeading";
+import { deleteData } from "@/Utils/deleteData";
 import { getFullImageLink } from "@/Utils/getFullImageLink";
 import { useRouter } from "next/navigation";
-import Heading from "@/Shared/Heading";
-import TableComponentHeading from "@/Shared/TableComponentHeading";
-import Button from "@/Shared/Button";
+import { useEffect, useState } from "react";
+import { AiFillEye } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
+import { RiEdit2Fill } from "react-icons/ri";
 
 const page = () => {
-  const navigate = useRouter();
-  const { unauthorizedLogout } = useAuthContext();
+  const router = useRouter();
   const { popupOption, setPopupOption } = usePopupContext();
 
   // ALL SELECTED IDs
   const [selectedIds, setSelectedIds] = useState([]);
+  const [isProductLoading, setIsProductLoading] = useState(false);
+  console.log({ isProductLoading });
+  const [data, setData] = useState([]);
+  const [isUpdating, setIsUpdating] = useState();
 
   // FILTERS
   const [filters, setFilters] = useState({
@@ -34,7 +33,21 @@ const page = () => {
     page: 1,
   });
 
-  const { data, isPending, refetch, isRefetching } = useAuthContext(filters);
+  useEffect(() => {
+    setIsProductLoading(true);
+    getAllProducts(filters)
+      .then((res) => {
+        if (res?.data) {
+          console.log({ res });
+          setData(res);
+          setIsProductLoading(false);
+        }
+      })
+      .catch((err) => {
+        setIsProductLoading(false);
+        console.log({ err });
+      });
+  }, [isUpdating]);
 
   // HANDLE PER PAGE
   const setPerPage = (count) => {
@@ -43,64 +56,60 @@ const page = () => {
 
   // HANDLE DELETE PRODUCT
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const handleDeleteProduct = (id) => {
-    setIsDeleteLoading(true);
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      customClass: {
-        confirmButton: "bg-primary",
-        cancelButton: "bg-error",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteProduct(id)
-          .then((res) => {
-            if (res?.deletedCount > 0) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Product has been deleted.",
-                icon: "success",
-              });
-              refetch();
-              setIsDeleteLoading(false);
-            }
-          })
-          .catch((err) => {
-            setIsDeleteLoading(false);
-            if (err?.response?.status === 401) {
-              unauthorizedLogout();
-            } else if (err?.response?.status === 403) {
-              toast.custom((t) => (
-                <CustomToaster
-                  t={t}
-                  type={"error"}
-                  text={`Your access is forbidden to perform this action`}
-                />
-              ));
-            }
-          });
-      }
+  const handleDeleteProduct = (data) => {
+    deleteData({
+      handler: deleteProduct,
+      data,
+      deleteMsg: "Product deleted successfully",
+      setIsUpdating,
+      setIsDeleteLoading,
     });
   };
 
   // HANDLE VIEW
-  const handleView = (id) => {
-    navigate(`/product/${id}`);
+  const handleView = (data) => {
+    setPopupOption({
+      ...popupOption,
+      open: true,
+      type: "viewProduct",
+      title: "Product Details",
+      data: data,
+    });
   };
 
+  const handleViewImages = (images) => {
+    setPopupOption({
+      open: true,
+      type: "viewFile",
+      title: "Files",
+      files: images?.map((image) => image?.file),
+      fileFolder: "Products",
+      onClose: () => {
+        setPopupOption({ ...popupOption, open: false });
+      },
+      closeOnDocumentClick: false,
+    });
+  };
+
+  // HANDLE CREATE
+  const handleCreate = () => {
+    setPopupOption({
+      ...popupOption,
+      open: true,
+      type: "product",
+      title: "Add New Product",
+      setIsUpdating: setIsUpdating,
+    });
+  };
   // HANDLE EDIT
-  const handleEdit = (id) => {
+  const handleEdit = (data) => {
     setPopupOption({
       ...popupOption,
       open: true,
       type: "product",
       title: "Edit Product",
-      refetch: refetch,
-      id: id,
+      data: data,
+      setIsUpdating: setIsUpdating,
     });
   };
 
@@ -151,39 +160,33 @@ const page = () => {
     },
     {
       name: "Image",
-      attribute_name: "image",
-      minWidth: 20,
+      attribute_name: "image_table",
+      minWidth: 15,
       show: true,
       isMainField: true,
     },
     {
       name: "Price",
       attribute_name: "price",
-      minWidth: 20,
+      minWidth: 10,
       show: true,
       isMainField: true,
     },
     {
       name: "Description",
-      attribute_name: "description",
+      attribute_name: "description_table",
       minWidth: 30,
       show: true,
     },
     {
       name: "Category",
-      attribute_name: "category",
-      minWidth: 30,
-      show: true,
-    },
-    {
-      name: "Speciality",
-      attribute_name: "speciality",
-      minWidth: 30,
+      attribute_name: "category_table",
+      minWidth: 20,
       show: true,
     },
   ]);
 
-  if (isPending) {
+  if (isProductLoading) {
     return <CustomLoading />;
   }
   return (
@@ -193,8 +196,13 @@ const page = () => {
       <TableComponentHeading
         routes={
           <div className={`text-[14px]`}>
-            <span className={`text-primary`}>Home</span> //{" "}
-            <span>All Products</span>
+            <span
+              onClick={() => router.push("/")}
+              className={`text-primary cursor-pointer`}
+            >
+              Home
+            </span>{" "}
+            // <span>All Products</span>
           </div>
         }
         heading={"Products"}
@@ -202,37 +210,16 @@ const page = () => {
       {/* HEADING AREA */}
       <div className={`flex justify-between items-center`}>
         <div>
-          {/* <Heading text={"All Products"} /> */}
-          <p className={`text-[14px]`}>
+          <Heading
+            isSubHeading={false}
+            isWave={false}
+            heading={"All Products"}
+          />
+          <p className={``}>
             Total {data?.total} {data?.total > 1 ? "Products" : "Product"} Found
           </p>
         </div>
-        <Button
-          text={"Add"}
-          handler={() =>
-            setPopupOption({
-              ...popupOption,
-              open: true,
-              type: "product",
-              title: "Add New Product",
-              refetch: refetch,
-            })
-          }
-        />
-        {/* <button
-          onClick={() =>
-            setPopupOption({
-              ...popupOption,
-              open: true,
-              type: "addProduct",
-              title: "Add New Product",
-              refetch: refetch,
-            })
-          }
-          className={``}
-        >
-          Add
-        </button> */}
+        <Button text={"Add"} handler={handleCreate} />
       </div>
       {/* TABLE AREA */}
       <div className={`space-y-10`}>
@@ -244,38 +231,37 @@ const page = () => {
           setPageNo={(data) => setFilters({ ...filters, page: data })}
           setPerPage={setPerPage}
           perPage={filters?.perPage}
-          isLoading={isPending || isRefetching}
-          rows={data?.result?.map((d, i) => ({
+          isLoading={isProductLoading}
+          rows={data?.data?.map((d, i) => ({
             ...d,
-            id: d?._id,
             count: (filters?.page - 1) * filters?.perPage + i + 1,
             name: d?.name,
-            description: <SplitDescription text={d?.description} length={30} />,
-            image: (
+            description_table: (
+              <SplitDescription text={d?.description} length={30} />
+            ),
+            image_table: (
               <img
-                src={getFullImageLink(d?.images ? d?.images[0] : "", "product")}
+                onClick={() => handleViewImages(d?.images)}
+                src={getFullImageLink(
+                  d?.images?.length > 0 ? d?.images[0]?.file : "",
+                  "Products"
+                )}
                 alt={d?.name}
-                className={`w-16 h-16 object-cover`}
+                className={`w-16 h-16 object-cover cursor-pointer`}
               />
             ),
             price: d?.price,
-            category: (
+            category_table: (
               <div className={`flex gap-1 capitalize`}>
-                {d?.category?.split("_")?.map((c) => (
-                  <span>{c}</span>
-                ))}
-              </div>
-            ),
-            speciality: (
-              <div className={`flex gap-1 capitalize`}>
-                {d?.speciality?.split("_")?.map((c) => (
-                  <span>{c}</span>
+                {d?.category?.split("_")?.map((c, i) => (
+                  <span key={i}>{c}</span>
                 ))}
               </div>
             ),
           }))}
           actions={actions}
           cols={cols}
+          getFullDataToActionHandler
         />
         {/* PAGINATION */}
         <Pagination

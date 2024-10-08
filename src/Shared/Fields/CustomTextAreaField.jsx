@@ -48,7 +48,7 @@ export default function CustomTextareaField({
         name={name}
         defaultValue={defaultValue}
         placeholder={`${placeholder}${required ? "*" : ""}`}
-        className={`bg-base-300 ${
+        className={`bg-secondary text-base-300 ${
           disable &&
           `${visibleBorder && "disabled:border-gray-200 border-opacity-10"}`
         } focus:outline-primary scrollbar input input-bordered ${height} pt-3 ${fieldClassName}`}

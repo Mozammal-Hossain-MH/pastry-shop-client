@@ -1,6 +1,8 @@
 "use client";
 import CreateAndUpdateProduct from "@/app/admin/all-products/CreateAndUpdateProduct";
+import ViewProduct from "@/app/admin/all-products/ViewProduct";
 import CustomPopup from "@/Shared/CustomPopup";
+import FileViewer from "@/Shared/FileViewer";
 import React, { createContext, useState, useContext } from "react";
 
 export const ProjectContext = createContext();
@@ -27,12 +29,9 @@ const ProjectProvider = ({ children }) => {
         setPopupOption={setPopupOption}
         Component={
           <>
-            {popupOption?.type === "product" && (
-              <CreateAndUpdateProduct
-                popupOption={popupOption}
-                handleClosePopup={popupOption?.onClose}
-              />
-            )}
+            {popupOption?.type === "product" && <CreateAndUpdateProduct />}
+            {popupOption?.type === "viewProduct" && <ViewProduct />}
+            {popupOption?.type === "viewFile" && <FileViewer />}
           </>
         }
       />

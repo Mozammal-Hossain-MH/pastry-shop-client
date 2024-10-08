@@ -111,7 +111,7 @@ export default function CustomNumberField({
         maxLength={maxLength}
         size={size}
         placeholder={`${placeholder}${required ? "*" : ""}`}
-        className={`bg-base-300 ${
+        className={`bg-secondary text-base-300 ${
           disable &&
           `px-1  ${
             visibleBorder && "disabled:border-gray-300 border-opacity-10 px-4"

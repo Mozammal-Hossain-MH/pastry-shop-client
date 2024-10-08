@@ -37,6 +37,20 @@ export default function CustomFieldForArray({
     }));
   };
 
+  // const handleFormArrayChange = (e) => {
+  //   const { name, value } = e.target;
+  //   const formName = name?.split("_")[0];
+  //   const formIndex = parseInt(name?.split("_")[1], 10);
+
+  //   const updatedArray = [...formData[formName]];
+  //   updatedArray[formIndex] = value;
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [formName]: updatedArray,
+  //   }));
+  // };
+
   return (
     <div className={`${wrapperClassName}`}>
       {/* LABEL */}

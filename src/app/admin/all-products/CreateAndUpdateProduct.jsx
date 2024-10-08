@@ -1,36 +1,41 @@
 "use client";
-import { useAuthContext } from "@/Context/ProjectProvider";
+import { useAuthContext, usePopupContext } from "@/Context/ProjectProvider";
 import CustomLoading from "@/Shared/CustomLoading";
 import CustomToaster from "@/Shared/CustomToaster";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-// import {
-//   getProductsById,
-//   postProduct,
-//   updateProduct,
-//   uploadProductPic,
-// } from "../../../Apis/products";
+
 import CustomField from "@/Shared/Fields/CustomField";
 import CustomFileUploader from "@/Shared/Fields/CustomFileUploader";
 import CustomMultiSelect from "@/Shared/Fields/CustomMultiSelect";
 import CustomNumberField from "@/Shared/Fields/CustomNumberField";
 import CustomTextareaField from "@/Shared/Fields/CustomTextAreaField";
-import { uploadProductPic } from "@/apis/products";
+import { postProduct, updateProduct, uploadProductPic } from "@/apis/products";
+import ButtonSpinner from "@/Shared/ButtonSpinner";
+import { errorHandler } from "@/Utils/errorHandler";
 
-const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
+const CreateAndUpdateProduct = () => {
+  const { popupOption } = usePopupContext();
+  console.log({ popupOption });
   const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    inStock: "",
-    category: "",
-    description: "",
-    images: [],
+    id: popupOption?.data ? popupOption?.data?.id : "",
+    name: popupOption?.data ? popupOption?.data?.name : "",
+    price: popupOption?.data ? popupOption?.data?.price : "",
+    inStock: popupOption?.data ? popupOption?.data?.inStock : "",
+    category: popupOption?.data ? popupOption?.data?.category : "",
+    description: popupOption?.data ? popupOption?.data?.description : "",
+    images: popupOption?.data ? popupOption?.data?.images : [],
   });
   const [filesToUpload, setFilesToUpload] = useState([]);
-  const [localImage, setLocalImage] = useState([]);
+  const [localImage, setLocalImage] = useState(
+    popupOption?.data
+      ? popupOption?.data?.images?.map((image) => ({
+          localImg: image?.file,
+          id: image?.id,
+        }))
+      : []
+  );
   console.log({ formData, localImage, filesToUpload });
-  const { unauthorizedLogout } = useAuthContext();
-  const { data: categories, isPending } = useAuthContext();
   const options = [
     {
       id: 1,
@@ -48,31 +53,6 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
       label: "honey",
     },
   ];
-
-  const [isProductLoading, setIsProductLoading] = useState(false);
-
-  useEffect(() => {
-    if (popupOption?.id) {
-      setIsProductLoading(true);
-      getProductsById(popupOption?.id)
-        .then((res) => {
-          setFormData({
-            name: res?.name,
-            price: res?.price,
-            category: res?.category,
-            features: res?.features,
-            specifications: res?.specifications,
-            speciality: res?.speciality,
-            description: res?.description,
-            images: res?.images,
-          });
-          setIsProductLoading(false);
-        })
-        .catch((err) => {
-          setIsProductLoading(false);
-        });
-    }
-  }, [popupOption?.id]);
 
   // VALIDATION
   const [errors, setErrors] = useState({});
@@ -146,28 +126,16 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
     }));
   };
 
-  // const handleFormArrayChange = (e) => {
-  //   const { name, value } = e.target;
-  //   const formName = name?.split("_")[0];
-  //   const formIndex = parseInt(name?.split("_")[1], 10);
-
-  //   const updatedArray = [...formData[formName]];
-  //   updatedArray[formIndex] = value;
-
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [formName]: updatedArray,
-  //   }));
-  // };
-
   const [filesUploading, setFilesUploading] = useState(false);
   const handleFileUpload = async (files) => {
     const fileArray = Array.from(files);
+    console.log({ fileArray });
 
     setLocalImage((prev) => [
       ...prev,
       ...fileArray.map((file) => ({
         localImg: URL.createObjectURL(file),
+        id: file?.name,
       })),
     ]);
     setFilesToUpload([...filesToUpload, ...fileArray]);
@@ -177,6 +145,7 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
     console.log({ files });
     const validFiles = [];
 
+    // Validate each file for size
     for (const file of files) {
       if (file.size > 5 * 1024 * 1024) {
         // File size exceeds 5MB, show error message
@@ -192,48 +161,64 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
       }
     }
 
+    // If there are valid files, proceed with the upload
     if (validFiles.length > 0) {
       setFilesUploading(true);
       try {
-        const res = await uploadProductPic(validFiles); // Await the result here
+        // Upload valid files
+        const res = await uploadProductPic(validFiles);
         if (res?.length > 0) {
+          // Clear files to upload and update formData with image links
           setFilesToUpload([]);
           setFormData((prev) => ({
             ...prev,
-            images: [...prev?.images, ...res],
+            images: [...prev?.images, ...res], // Add uploaded image URLs to formData
           }));
+          const updatedFormData = {
+            ...formData,
+            images: [...(formData?.images || []), ...res], // Add uploaded image URLs
+          };
           setFilesUploading(false);
-          return res; // Return the response here
+          return updatedFormData; // Return uploaded image links
         }
       } catch (error) {
         setFilesUploading(false);
-        throw error; // Optional: propagate error if needed
+        throw error; // Propagate error if needed
       }
     }
   };
 
-  //   SUBMIT DATA
+  // SUBMIT DATA
   const handleSubmit = async () => {
     // Validate form
     if (validateForm()) {
-      if (popupOption?.id) {
-        updateFunction(formData);
+      if (popupOption?.data) {
+        if (filesToUpload.length > 0) {
+          const res = await fileUploadToServer(filesToUpload);
+          console.log({ res });
+          if (res?.images?.length > 0) {
+            updateFunction(res);
+          }
+        } else {
+          updateFunction(formData);
+        }
       } else {
         const res = await fileUploadToServer(filesToUpload);
         console.log({ res });
-        if (res?.length > 0) {
-          createFunction(formData);
+        if (res?.images?.length > 0) {
+          createFunction(res);
         }
       }
     }
   };
 
   const [isProductCreating, setIsProductCreating] = useState(false);
-  const createFunction = (formData) => {
+  const createFunction = (data) => {
     setIsProductCreating(true);
-    postProduct(formData)
+    postProduct(data)
       .then((res) => {
-        if (res?.insertedId) {
+        console.log({ res });
+        if (res?.success) {
           toast.custom((t) => (
             <CustomToaster
               t={t}
@@ -245,66 +230,45 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
           setFormData({
             name: "",
             price: "",
+            inStock: "",
             category: "",
-            features: [""],
-            specifications: [""],
-            speciality: "",
             description: "",
             images: [],
           });
-          handleClosePopup();
-          popupOption.refetch();
+          popupOption?.onClose();
+          popupOption.setIsUpdating(Math.random());
           setIsProductCreating(false);
         }
       })
       .catch((err) => {
-        setIsProductCreating(false);
-        if (err?.response?.status === 401) {
-          unauthorizedLogout();
-        } else if (err?.response?.status === 403) {
-          toast.custom((t) => (
-            <CustomToaster
-              t={t}
-              type={"error"}
-              text={`Your access is forbidden to perform this action`}
-            />
-          ));
-        }
+        errorHandler({ err, setLoading: setIsProductCreating });
       });
   };
 
-  const updateFunction = () => {
-    setIsProductCreating(true);
-    updateProduct(formData, popupOption?.id)
+  const [isProductUpdating, setIsProductUpdating] = useState(false);
+  const updateFunction = (data) => {
+    setIsProductUpdating(true);
+    updateProduct(data)
       .then((res) => {
-        popupOption?.refetch();
-        toast.custom((t) => (
-          <CustomToaster
-            t={t}
-            type={"success"}
-            text={`Product updated successfully`}
-          />
-        ));
-        handleClosePopup();
-        setIsProductCreating(false);
+        if (res?.success) {
+          toast.custom((t) => (
+            <CustomToaster
+              t={t}
+              type={"success"}
+              text={`Product updated successfully`}
+            />
+          ));
+          popupOption?.onClose();
+          popupOption.setIsUpdating(Math.random());
+          setIsProductUpdating(false);
+        }
       })
       .catch((err) => {
-        setIsProductCreating(false);
-        if (err?.response?.status === 401) {
-          unauthorizedLogout();
-        } else if (err?.response?.status === 403) {
-          toast.custom((t) => (
-            <CustomToaster
-              t={t}
-              type={"error"}
-              text={`Your access is forbidden to perform this action`}
-            />
-          ));
-        }
+        errorHandler({ err, setLoading: setIsProductUpdating });
       });
   };
 
-  if (isProductCreating || isProductLoading) {
+  if (isProductCreating || isProductUpdating) {
     return <CustomLoading />;
   }
   return (
@@ -359,7 +323,7 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
         <CustomMultiSelect
           disable={false}
           label={"Category"}
-          loading={isPending}
+          loading={false}
           placeholder="Select Category"
           selectedValues={options?.filter(
             (m) => m?.label === formData?.category
@@ -389,37 +353,50 @@ const CreateAndUpdateProduct = ({ handleClosePopup, popupOption }) => {
         <CustomFileUploader
           details={`Allowed .png, .jpg, .jpeg, .pdf files under 5MB`}
           accept={".png, .jpg, .jpeg, .pdf"}
-          files={localImage?.map((file) => file?.localImg)}
-          fileFolder={"product"}
+          files={localImage?.map((file) => ({
+            file: file?.localImg,
+            id: file?.id,
+          }))}
+          fileFolder={"Products"}
           // isFileUploading={filesUploaderQuery.isPending}
           onFileSelect={async (e) => handleFileUpload(e)}
           onDrop={(files) => handleFileUpload(files)}
           onRemove={(e) => {
+            console.log({ e });
             setLocalImage((prev) =>
-              prev?.filter((file) => file?.localImg !== e)
+              prev?.filter((file) => file?.localImg !== e?.file)
             );
+            setFilesToUpload((prev) =>
+              prev?.filter((file) => file?.name !== e?.id)
+            );
+            setFormData((prev) => ({
+              ...prev,
+              images: prev?.images?.filter((file) => file?.id !== e?.id),
+            }));
           }}
           required
         />
       </div>
       <div className="flex flex-col md:flex-row w-full justify-center md:justify-end items-center py-5 gap-2">
         <button
-          disabled={filesUploading || isProductCreating}
-          onClick={handleClosePopup}
+          disabled={filesUploading || isProductCreating || isProductUpdating}
+          onClick={popupOption?.onClose}
           className="btn w-full md:btn-wide btn-outline btn-primary"
         >
           Cancel
         </button>
         <button
-          disabled={filesUploading || isProductCreating}
+          disabled={filesUploading || isProductCreating || isProductUpdating}
           onClick={handleSubmit}
           className="btn w-full md:btn-wide btn-primary"
         >
-          {/* {isPendingSubmit || createDepartmentQuery.isPending ? (
+          {filesUploading || isProductCreating || isProductUpdating ? (
             <ButtonSpinner />
-          ) : ( */}
-          {popupOption?.id ? "Update" : "Create"}
-          {/* )} */}
+          ) : popupOption?.data ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
         </button>
       </div>
     </div>

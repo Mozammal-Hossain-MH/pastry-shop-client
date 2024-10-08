@@ -23,7 +23,7 @@ export default function SplitDescription({ text, length }) {
         {text?.length > length && (
           <span
             onClick={() => setSeeMore(true)}
-            className={`text-body-sub font-medium cursor-pointer whitespace-nowrap inline`}
+            className={`text-primary font-medium cursor-pointer whitespace-nowrap inline`}
           >
             {seeMore ? "" : "see more"}
           </span>

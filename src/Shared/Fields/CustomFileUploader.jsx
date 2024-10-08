@@ -22,6 +22,7 @@ export default function CustomFileUploader({
   onDrop = (event) => event,
   required,
 }) {
+  console.log({ files });
   const [dragOver, setDragOver] = useState(false);
 
   useEffect(() => {
@@ -109,11 +110,11 @@ export default function CustomFileUploader({
         }
       />
 
-      <p className="text-sm font-semibold mb-2">
+      <p className="text-sm font-semibold label-text mb-2">
         Attachment{" "}
         {required && <span className="text-error font-bold text-md">*</span>}
       </p>
-      <div className="bg-base-300 border border-primary-content shadow-md rounded-xl pb-4">
+      <div className="bg-secondary text-base-300 border border-primary-content shadow-md rounded-xl pb-4">
         <div className="px-5 py-2 flex items-star md:items-center justify-start gap-2">
           <div className="border rounded-full border-gray-500 h-8 w-8 md:h-10 md:w-10 flex justify-center items-center">
             <ImFilesEmpty className="text-sm text-gray-500" />
@@ -187,23 +188,23 @@ export default function CustomFileUploader({
                       className="relative w-[200px] sm:w-[100px] h-[200px] sm:h-[100px] shadow-md rounded-xl  group flex justify-center items-center"
                       key={index}
                     >
-                      {file !== "" && (
+                      {file?.file !== "" && (
                         <div onClick={() => handleViewFiles([file])}>
-                          {file?.endsWith(".png") ||
-                          file?.endsWith(".jpg") ||
-                          file?.endsWith(".jpeg") ||
-                          file?.endsWith(".JPEG") ||
-                          file?.endsWith(".JPG") ? (
+                          {file?.file?.endsWith(".png") ||
+                          file?.file?.endsWith(".jpg") ||
+                          file?.file?.endsWith(".jpeg") ||
+                          file?.file?.endsWith(".JPEG") ||
+                          file?.file?.endsWith(".JPG") ? (
                             <img
-                              src={getFullImageLink(file, fileFolder)}
-                              alt={file.name}
+                              src={getFullImageLink(file?.file, fileFolder)}
+                              alt={file?.id}
                               className="h-full w-full duration-200 absolute top-0 cursor-pointer  rounded-xl  right-0 object-cover group-hover:opacity-20"
                             />
                           ) : (
                             <div className="h-full w-full duration-200 absolute top-0 cursor-pointer  rounded-xl  right-0 object-cover group-hover:opacity-20 flex justify-center items-center">
                               <img
-                                src={file}
-                                alt={file.name}
+                                src={file?.file}
+                                alt={file?.id}
                                 className="h-full w-full duration-200 absolute top-0 cursor-pointer  rounded-xl  right-0 object-cover group-hover:opacity-20"
                               />
                             </div>

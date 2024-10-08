@@ -53,7 +53,7 @@ export default function Table({
 
   return (
     <div
-      className={`min-h-[300px] overflow-x-auto scrollbarX scrollbar top-0 w-full bg-primary `}
+      className={`min-h-[300px] overflow-x-auto scrollbarX scrollbar top-0 w-full bg-secondary `}
       data-auto={`table-container-${dataAuto}`}
     >
       {/* FOR DESKTOP VIEW  */}
@@ -63,7 +63,7 @@ export default function Table({
       >
         {header ? (
           <thead className={`${tableHeaderClass}`}>
-            <tr className="h-16 text-base-300 border-b border-primary-content">
+            <tr className="h-16 text-base-300 bg-primary border-b border-primary-content">
               {checkBoxes ? (
                 <th
                   style={{
@@ -151,9 +151,8 @@ export default function Table({
               rows.map((data, i) => (
                 <tr
                   key={i}
-                  className={`border-b ${
-                    i % 2 === 1 ? "bg-primary" : "bg-secondary"
-                  } border-primary-content  h-16 hover:bg-secondary text-neutral group tableRowAdmin hover:overflow-hidden`}
+                  className={`border-b  bg-secondary
+                   border-primary-content  h-16 hover:bg-secondary text-neutral group tableRowAdmin hover:overflow-hidden`}
                 >
                   {checkBoxes ? (
                     <td className="w-[50px] px-8">

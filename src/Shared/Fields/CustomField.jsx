@@ -77,7 +77,7 @@ export default function CustomField({
         onBlur={onBlur}
         defaultValue={defaultValue}
         placeholder={`${placeholder}${required ? (taskField ? "" : "*") : ""}`}
-        className={`input bg-base-300
+        className={`input bg-secondary text-base-300
 
         ${
           disable &&

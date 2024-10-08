@@ -1,3 +1,3 @@
 export const getFullImageLink = (url, fileFolder) => {
-  return `${import.meta.env.VITE_BACKEND_URL}/${fileFolder}/${url}`;
+  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/${fileFolder}/${url}`;
 };

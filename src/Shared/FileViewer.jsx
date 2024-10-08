@@ -2,9 +2,13 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { getFullImageLink } from "../Utils/getFullImageLink";
+import { usePopupContext } from "@/Context/ProjectProvider";
 
-const FileViewer = ({ files, onClose, handleClosePopup, fileFolder }) => {
+const FileViewer = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { popupOption } = usePopupContext();
+  const { files, onClose, fileFolder } = popupOption;
+  console.log({ popupOption });
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
@@ -77,7 +81,7 @@ const FileViewer = ({ files, onClose, handleClosePopup, fileFolder }) => {
         onClick={onClose}
       ></div>
 
-      <div className="viewer-container pl-2">
+      <div className="relative pl-2">
         <h2 className={`pt-5 text-primary text-xl font-bold`}>
           Total {files?.length} {files?.length > 1 ? "files" : "file"} found{" "}
         </h2>
@@ -120,22 +124,24 @@ const FileViewer = ({ files, onClose, handleClosePopup, fileFolder }) => {
           </div>
         ))}
         {files.length > 1 && (
-          <div className="flex justify-between items-center mt-5">
+          <div className="w-full absolute top-1/3 flex justify-between items-center mt-5">
             <button
               data-auto={`file-viewer-previous-button-all-page`}
-              data-tip="previous"
-              className="nav-btn prev tooltip tooltip-primary tooltip-right h-10 w-10 rounded-full btn-primary  flex justify-center items-center"
+              className=" nav-btn prev h-10 w-10 rounded-full btn-primary  flex justify-center items-center"
               onClick={handlePrev}
             >
-              <IoIosArrowBack className="text-base-300 text-xl" />
+              <span className={`p-2 rounded-full bg-primary text-base-300`}>
+                <IoIosArrowBack className=" text-xl " />{" "}
+              </span>
             </button>
             <button
               data-auto={`file-viewer-next-button-all-page`}
-              data-tip="next"
-              className="nav-btn next tooltip tooltip-primary tooltip-left h-10 w-10 rounded-full btn-primary  flex justify-center items-center"
+              className=" nav-btn next h-10 w-10 rounded-full btn-primary  flex justify-center items-center"
               onClick={handleNext}
             >
-              <IoIosArrowForward className="text-base-300 text-xl" />
+              <span className={`p-2 rounded-full bg-primary text-base-300`}>
+                <IoIosArrowForward className=" text-xl" />
+              </span>
             </button>
           </div>
         )}
@@ -146,7 +152,7 @@ const FileViewer = ({ files, onClose, handleClosePopup, fileFolder }) => {
         data-auto={`file-viewer-close-button-all-page`}
         className="flex flex-col md:flex-row w-full justify-center md:justify-end items-center mt-5 gap-2"
       >
-        <button onClick={handleClosePopup} className="btn w-full btn-primary">
+        <button onClick={onClose} className="btn w-full btn-primary">
           Close
         </button>
       </div>

@@ -21,7 +21,7 @@ export default function CustomPopup({
       className="relative overflow-hidden w-1/2 rounded-xl pop"
     >
       <div
-        className={`relative  bg-base-300 text-base-100 shadow-xl rounded-xl border-primary-content border-2 overflow-hidden w-[95vw] sm:w-[70vw] md:w-[70vw] lg:w-[50vw] ${popupClasses} max-h-[90vh] `}
+        className={`relative  bg-secondary text-base-100 shadow-xl rounded-xl border-primary-content border-2 overflow-hidden w-[95vw] sm:w-[70vw] md:w-[70vw] lg:w-[50vw] ${popupClasses} max-h-[90vh] `}
       >
         {/* {!closeButtonHidden ? ( */}
         <button
