@@ -1,13 +1,13 @@
+import Button from "@/Shared/Button";
 import FixedBgComponent from "@/Shared/FixedBgComponent";
-import Slider from "./slider";
 import Heading from "@/Shared/Heading";
 import ProductCard from "@/Shared/ProductCard";
-import Button from "@/Shared/Button";
-import Tabs from "@/Shared/Tabs";
 import ProductCardOnCategory from "@/Shared/ProductCardOnCategory";
-import Footer from "@/Shared/Footer";
+import Tabs from "@/Shared/Tabs";
+import axios from "axios";
+import Slider from "./slider";
 
-export default function Home() {
+export default async function page() {
   const products = [
     {
       id: 1,
@@ -74,7 +74,11 @@ export default function Home() {
       offerPrice: 11.49,
     },
   ];
+  const productByRandom = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get/random?limit=4`
+  );
 
+  console.log({ productByRandom: productByRandom?.data });
   //
   const tabs = [
     {
@@ -148,7 +152,7 @@ export default function Home() {
           heading={"Discover Sweet Delicious"}
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products?.map((product) => (
+          {productByRandom?.data?.data?.map((product) => (
             <ProductCard key={product?.id} product={product} />
           ))}
         </div>
@@ -172,7 +176,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

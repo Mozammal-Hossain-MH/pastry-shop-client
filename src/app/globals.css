@@ -74,3 +74,14 @@
       50% calc(50% + var(--s) / 2 + var(--b) / 2) / calc(4 * var(--s))
       calc(var(--s) + var(--b)) repeat-x;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

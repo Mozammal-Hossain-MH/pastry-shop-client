@@ -166,8 +166,15 @@ const page = () => {
       isMainField: true,
     },
     {
-      name: "Price",
-      attribute_name: "price",
+      name: "Regular Price",
+      attribute_name: "regularPrice",
+      minWidth: 10,
+      show: true,
+      isMainField: true,
+    },
+    {
+      name: "Discount Price",
+      attribute_name: "discountPrice",
       minWidth: 10,
       show: true,
       isMainField: true,
@@ -181,7 +188,7 @@ const page = () => {
     {
       name: "Category",
       attribute_name: "category_table",
-      minWidth: 20,
+      minWidth: 10,
       show: true,
     },
   ]);

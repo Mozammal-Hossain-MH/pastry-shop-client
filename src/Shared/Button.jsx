@@ -1,3 +1,4 @@
+"use client";
 import { IoIosArrowRoundForward } from "react-icons/io";
 const Button = ({
   text,

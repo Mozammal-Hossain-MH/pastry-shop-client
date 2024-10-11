@@ -20,7 +20,8 @@ const CreateAndUpdateProduct = () => {
   const [formData, setFormData] = useState({
     id: popupOption?.data ? popupOption?.data?.id : "",
     name: popupOption?.data ? popupOption?.data?.name : "",
-    price: popupOption?.data ? popupOption?.data?.price : "",
+    regularPrice: popupOption?.data ? popupOption?.data?.regularPrice : "",
+    discountPrice: popupOption?.data ? popupOption?.data?.discountPrice : "",
     inStock: popupOption?.data ? popupOption?.data?.inStock : "",
     category: popupOption?.data ? popupOption?.data?.category : "",
     description: popupOption?.data ? popupOption?.data?.description : "",
@@ -64,11 +65,14 @@ const CreateAndUpdateProduct = () => {
       newErrors.name = "Name is required";
     }
     // VALIDATE PRICE
-    if (!formData.price) {
-      newErrors.price = "Price is required";
+    if (!formData.regularPrice) {
+      newErrors.regularPrice = "Regular Price is required";
     }
-    if (formData.price < 0) {
-      newErrors.price = "Price cannot be negative";
+    if (formData.regularPrice < 0) {
+      newErrors.regularPrice = "Regular Price cannot be negative";
+    }
+    if (formData.discountPrice < 0) {
+      newErrors.discountPrice = "Discount Price cannot be negative";
     }
     // VALIDATE STOCK
     if (!formData.inStock) {
@@ -291,17 +295,29 @@ const CreateAndUpdateProduct = () => {
         />
         {/* PRICE */}
         <CustomNumberField
-          defaultValue={formData?.price}
+          defaultValue={formData?.regularPrice}
           disable={false}
           fieldClassName={"w-full"}
-          error={errors?.price}
-          id={"price"}
-          label={"Price"}
-          name={"price"}
+          error={errors?.regularPrice}
+          id={"regularPrice"}
+          label={"Regular Price"}
+          name={"regularPrice"}
           onChange={handleFormChange}
-          placeholder={"Price"}
+          placeholder={"Regular Price"}
           wrapperClassName={"w-full"}
           required={true}
+        />
+        <CustomNumberField
+          defaultValue={formData?.discountPrice}
+          disable={false}
+          fieldClassName={"w-full"}
+          error={errors?.discountPrice}
+          id={"discountPrice"}
+          label={"Discount Price"}
+          name={"discountPrice"}
+          onChange={handleFormChange}
+          placeholder={"Discount Price"}
+          wrapperClassName={"w-full"}
         />
 
         {/* STOCK */}

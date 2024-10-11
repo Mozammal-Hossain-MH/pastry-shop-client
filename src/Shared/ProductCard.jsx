@@ -1,11 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import "./sharedAnimation.css";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import Button from "./Button";
+import "./sharedAnimation.css";
+import { getFullImageLink } from "@/Utils/getFullImageLink";
 
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
+
   const useDeviceWidth = () => {
     const [width, setWidth] = useState(() =>
       typeof window !== "undefined" ? window.innerWidth : 0
@@ -37,7 +39,15 @@ const ProductCard = ({ product }) => {
         // style={{ backgroundImage: `url(/dots.png)` }}
         className="overflow-hidden rotating-background"
       >
-        <img className="jump-image" src={product?.image} alt={product?.name} />
+        {console.log({ product })}
+        <img
+          className="jump-image"
+          src={getFullImageLink(
+            product?.images?.length > 0 && product?.images[0]?.file,
+            "Products"
+          )}
+          alt={product?.name}
+        />
       </div>
       <motion.div
         animate={

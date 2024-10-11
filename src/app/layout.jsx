@@ -3,6 +3,7 @@ import Navbar from "@/Shared/Navbar";
 import { Cormorant } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/Shared/Footer";
 
 const cormorant = Cormorant({ subsets: ["latin"] });
 
@@ -16,11 +17,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${cormorant.className} antialiased relative`}>
         <ProjectProvider>
-          <div className="absolute top-0 left-0 right-0 z-10">
+          <div className="absolute top-0 left-0 right-0 z-[100]">
             <Navbar />
           </div>
           <div className="">{children}</div>
           <Toaster position="top-right" />
+          <div>
+            <Footer />
+          </div>
         </ProjectProvider>
       </body>
     </html>

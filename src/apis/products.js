@@ -38,6 +38,24 @@ export const getAllProducts = async (filters) => {
   }
 };
 
+export const getServerSideProps = async (context) => {
+  const { id } = context.params; // Extract the 'id' from params
+  try {
+    const res = await axiosPublic.get(`/products?id=${id}`);
+    return {
+      props: {
+        product: res?.data,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        error: "Product not found",
+      },
+    };
+  }
+};
+
 // ----------------------------------------------------------------
 // POST API
 // ----------------------------------------------------------------
