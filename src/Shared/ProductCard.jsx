@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import "./sharedAnimation.css";
 import { getFullImageLink } from "@/Utils/getFullImageLink";
+import { useRouter } from "next/navigation";
 
 const ProductCard = ({ product }) => {
+  const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
 
   const useDeviceWidth = () => {
@@ -28,12 +30,12 @@ const ProductCard = ({ product }) => {
 
     return width;
   };
-  console.log(useDeviceWidth());
   return (
     <div
+      onClick={() => router.push(`/products/${product?.id}`)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative image-hover "
+      className="relative image-hover cursor-pointer"
     >
       <div
         // style={{ backgroundImage: `url(/dots.png)` }}
@@ -59,7 +61,9 @@ const ProductCard = ({ product }) => {
         }
         className="my-5 flex flex-col justify-center items-center transition-all cart-button"
       >
-        <Button text={"Add to cart"} />
+        <div onClick={() => router.push(`/`)} className={`z-10`}>
+          <Button text={"Add to cart"} />
+        </div>
       </motion.div>
       <motion.div
         // initial={{ y: -100 }}

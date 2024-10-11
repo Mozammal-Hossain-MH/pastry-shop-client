@@ -1,4 +1,5 @@
 "use client";
+import { deleteCategory, getAllCategories } from "@/apis/categories";
 import { deleteProduct, getAllProducts } from "@/apis/products";
 import { usePopupContext } from "@/Context/ProjectProvider";
 import Button from "@/Shared/Button";
@@ -22,8 +23,8 @@ const page = () => {
 
   // ALL SELECTED IDs
   const [selectedIds, setSelectedIds] = useState([]);
-  const [isProductLoading, setIsProductLoading] = useState(false);
-  console.log({ isProductLoading });
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+  console.log({ isCategoryLoading });
   const [data, setData] = useState([]);
   const [isUpdating, setIsUpdating] = useState();
 
@@ -34,17 +35,17 @@ const page = () => {
   });
 
   useEffect(() => {
-    setIsProductLoading(true);
-    getAllProducts(filters)
+    setIsCategoryLoading(true);
+    getAllCategories(filters)
       .then((res) => {
         if (res?.data) {
           console.log({ res });
           setData(res);
-          setIsProductLoading(false);
+          setIsCategoryLoading(false);
         }
       })
       .catch((err) => {
-        setIsProductLoading(false);
+        setIsCategoryLoading(false);
         console.log({ err });
       });
   }, [isUpdating]);
@@ -58,9 +59,9 @@ const page = () => {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const handleDeleteProduct = (data) => {
     deleteData({
-      handler: deleteProduct,
+      handler: deleteCategory,
       data,
-      deleteMsg: "Product deleted successfully",
+      deleteMsg: "Category deleted successfully",
       setIsUpdating,
       setIsDeleteLoading,
     });
@@ -77,26 +78,12 @@ const page = () => {
     });
   };
 
-  const handleViewImages = (images) => {
-    setPopupOption({
-      open: true,
-      type: "viewFile",
-      title: "Files",
-      files: images?.map((image) => image?.file),
-      fileFolder: "Products",
-      onClose: () => {
-        setPopupOption({ ...popupOption, open: false });
-      },
-      closeOnDocumentClick: false,
-    });
-  };
-
   // HANDLE CREATE
   const handleCreate = () => {
     setPopupOption({
       ...popupOption,
       open: true,
-      type: "product",
+      type: "category",
       title: "Add New Product",
       setIsUpdating: setIsUpdating,
     });
@@ -106,7 +93,7 @@ const page = () => {
     setPopupOption({
       ...popupOption,
       open: true,
-      type: "product",
+      type: "category",
       title: "Edit Product",
       data: data,
       setIsUpdating: setIsUpdating,
@@ -158,42 +145,16 @@ const page = () => {
       show: true,
       isMainField: true,
     },
-    {
-      name: "Image",
-      attribute_name: "image_table",
-      minWidth: 15,
-      show: true,
-      isMainField: true,
-    },
-    {
-      name: "Regular Price",
-      attribute_name: "regularPrice",
-      minWidth: 10,
-      show: true,
-      isMainField: true,
-    },
-    {
-      name: "Discount Price",
-      attribute_name: "discountPrice",
-      minWidth: 10,
-      show: true,
-      isMainField: true,
-    },
+
     {
       name: "Description",
       attribute_name: "description_table",
       minWidth: 30,
       show: true,
     },
-    {
-      name: "Category",
-      attribute_name: "category_table",
-      minWidth: 10,
-      show: true,
-    },
   ]);
 
-  if (isProductLoading) {
+  if (isCategoryLoading) {
     return <CustomLoading />;
   }
   return (
@@ -209,10 +170,10 @@ const page = () => {
             >
               Home
             </span>{" "}
-            // <span>All Products</span>
+            // <span>All Categories</span>
           </div>
         }
-        heading={"Products"}
+        heading={"Categories"}
       />
       {/* HEADING AREA */}
       <div className={`flex justify-between items-center`}>
@@ -220,10 +181,11 @@ const page = () => {
           <Heading
             isSubHeading={false}
             isWave={false}
-            heading={"All Products"}
+            heading={"All Categories"}
           />
           <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "Products" : "Product"} Found
+            Total {data?.total} {data?.total > 1 ? "Categories" : "Category"}{" "}
+            Found
           </p>
         </div>
         <Button text={"Add"} handler={handleCreate} />
@@ -238,32 +200,13 @@ const page = () => {
           setPageNo={(data) => setFilters({ ...filters, page: data })}
           setPerPage={setPerPage}
           perPage={filters?.perPage}
-          isLoading={isProductLoading}
+          isLoading={isCategoryLoading}
           rows={data?.data?.map((d, i) => ({
             ...d,
             count: (filters?.page - 1) * filters?.perPage + i + 1,
             name: d?.name,
             description_table: (
               <SplitDescription text={d?.description} length={30} />
-            ),
-            image_table: (
-              <img
-                onClick={() => handleViewImages(d?.images)}
-                src={getFullImageLink(
-                  d?.images?.length > 0 ? d?.images[0]?.file : "",
-                  "Products"
-                )}
-                alt={d?.name}
-                className={`w-16 h-16 object-cover cursor-pointer`}
-              />
-            ),
-            price: d?.price,
-            category_table: (
-              <div className={`flex gap-1 capitalize`}>
-                {d?.category?.split("_")?.map((c, i) => (
-                  <span key={i}>{c}</span>
-                ))}
-              </div>
             ),
           }))}
           actions={actions}

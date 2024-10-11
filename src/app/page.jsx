@@ -153,7 +153,15 @@ export default async function page() {
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {productByRandom?.data?.data?.map((product) => (
-            <ProductCard key={product?.id} product={product} />
+            <ProductCard
+              key={product?.id}
+              product={{
+                name: product?.name,
+                images: JSON.parse(product?.images),
+                regularPrice: product?.regularPrice,
+                offerPrice: product?.offerPrice,
+              }}
+            />
           ))}
         </div>
         <div className="flex flex-col justify-center items-center">
