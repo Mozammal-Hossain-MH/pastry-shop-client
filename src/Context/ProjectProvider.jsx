@@ -2,6 +2,7 @@
 import CreateAndUpdateProduct from "@/app/admin/all-products/CreateAndUpdateProduct";
 import ViewProduct from "@/app/admin/all-products/ViewProduct";
 import CreateAndUpdateCategory from "@/app/admin/categories/CreateAndUpdateCategory";
+import CreateAndUpdateFaq from "@/app/admin/faq/CreateAndUpdateFaq";
 import CustomPopup from "@/Shared/CustomPopup";
 import FileViewer from "@/Shared/FileViewer";
 import React, { createContext, useState, useContext } from "react";
@@ -34,6 +35,7 @@ const ProjectProvider = ({ children }) => {
             {popupOption?.type === "viewProduct" && <ViewProduct />}
             {popupOption?.type === "viewFile" && <FileViewer />}
             {popupOption?.type === "category" && <CreateAndUpdateCategory />}
+            {popupOption?.type === "faq" && <CreateAndUpdateFaq />}
           </>
         }
       />

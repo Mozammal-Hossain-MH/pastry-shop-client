@@ -156,6 +156,7 @@ export default async function page() {
             <ProductCard
               key={product?.id}
               product={{
+                id: product?.id,
                 name: product?.name,
                 images: JSON.parse(product?.images),
                 regularPrice: product?.regularPrice,

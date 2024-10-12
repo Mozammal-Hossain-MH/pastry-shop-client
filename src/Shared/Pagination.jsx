@@ -38,8 +38,8 @@ export const Pagination = ({ filters, setFilters, total }) => {
           onClick={() => setFilters({ ...filters, page: i + 1 })}
           className={`flex justify-center items-center h-8 w-8 rounded-full font-semibold transition-transform hover:scale-105 active:scale-95 ${
             page === a + 1
-              ? "bg-btn-primary text-heading-secondary"
-              : "bg-btn-secondary text-heading-main"
+              ? "bg-primary text-base-300"
+              : "bg-secondary text-base-300"
           }`}
         >
           <button>{a + 1}</button>

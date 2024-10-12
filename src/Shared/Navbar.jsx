@@ -78,13 +78,36 @@ const Navbar = () => {
           handler: handleCloseMenu,
         },
         {
-          id: 1,
+          id: 2,
           name: "Categories",
           path: "/admin/categories",
           // Icon: <Tag className="h-4 w-4" />,
           handler: handleCloseMenu,
         },
+        {
+          id: 3,
+          name: "Messages",
+          path: "/admin/messages",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
+        {
+          id: 4,
+          name: "FAQ",
+          path: "/admin/faq",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
       ],
+    },
+    {
+      id: 5,
+      name: "Contacts",
+      path: "/contact-us",
+      // Icon: <Home className="h-4 w-4" />,
+      handler: handleCloseMenu,
+      permission: true,
+      Children: [],
     },
   ];
   return (
@@ -112,7 +135,7 @@ const Navbar = () => {
               alt="logo"
             />
             <div className={`xl:hidden`}></div>
-            <ul className="hidden xl:flex ">
+            <ul className="hidden xl:flex">
               {menus?.map((menu, i) =>
                 menu?.permission ? (
                   menu?.Children?.length > 0 ? (

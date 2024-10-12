@@ -30,7 +30,7 @@ export const getAllProducts = async (filters) => {
   const { page, perPage } = filters;
   try {
     const res = await axiosPublic.get(
-      `/products?page=${page}&per_page=${perPage}`
+      `/products?page=${page}&perPage=${perPage}`
     );
     return res?.data;
   } catch (error) {

@@ -4,21 +4,19 @@ import CustomLoading from "@/Shared/CustomLoading";
 import CustomToaster from "@/Shared/CustomToaster";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
 import ButtonSpinner from "@/Shared/ButtonSpinner";
 import CustomField from "@/Shared/Fields/CustomField";
 import CustomTextareaField from "@/Shared/Fields/CustomTextAreaField";
 import { errorHandler } from "@/Utils/errorHandler";
-import { postCategory, updateCategory } from "@/apis/categories";
-import { uploadProductPic } from "@/apis/products";
+import { postFaq, updateFaq } from "@/apis/faqs";
 
-const CreateAndUpdateCategory = () => {
+const CreateAndUpdateFaq = () => {
   const { popupOption } = usePopupContext();
   console.log({ popupOption });
   const [formData, setFormData] = useState({
     id: popupOption?.data ? popupOption?.data?.id : "",
-    name: popupOption?.data ? popupOption?.data?.name : "",
-    description: popupOption?.data ? popupOption?.data?.description : "",
+    question: popupOption?.data ? popupOption?.data?.question : "",
+    answer: popupOption?.data ? popupOption?.data?.answer : "",
   });
 
   // VALIDATION
@@ -27,8 +25,11 @@ const CreateAndUpdateCategory = () => {
     const newErrors = {};
 
     // VALIDATE NAME
-    if (!formData.name || formData.name.trim() === "") {
-      newErrors.name = "Name is required";
+    if (!formData.question || formData.question.trim() === "") {
+      newErrors.question = "Question is required";
+    }
+    if (!formData.answer || formData.answer.trim() === "") {
+      newErrors.answer = "Answer is required";
     }
 
     setErrors(newErrors);
@@ -81,10 +82,10 @@ const CreateAndUpdateCategory = () => {
     }
   };
 
-  const [isCategoryCreating, setIsCategoryCreating] = useState(false);
+  const [isFaqCreating, setIsFaqCreating] = useState(false);
   const createFunction = (data) => {
-    setIsCategoryCreating(true);
-    postCategory(data)
+    setIsFaqCreating(true);
+    postFaq(data)
       .then((res) => {
         console.log({ res });
         if (res?.success) {
@@ -92,7 +93,7 @@ const CreateAndUpdateCategory = () => {
             <CustomToaster
               t={t}
               type={"success"}
-              text={`Category added successfully`}
+              text={`FAQ added successfully`}
             />
           ));
 
@@ -106,38 +107,38 @@ const CreateAndUpdateCategory = () => {
           });
           popupOption?.onClose();
           popupOption.setIsUpdating(Math.random());
-          setIsCategoryCreating(false);
+          setIsFaqCreating(false);
         }
       })
       .catch((err) => {
-        errorHandler({ err, setLoading: setIsCategoryCreating });
+        errorHandler({ err, setLoading: setIsFaqCreating });
       });
   };
 
-  const [isCategoryUpdating, setIsCategoryUpdating] = useState(false);
+  const [isFaqUpdating, setIsFaqUpdating] = useState(false);
   const updateFunction = (data) => {
-    setIsCategoryUpdating(true);
-    updateCategory(data)
+    setIsFaqUpdating(true);
+    updateFaq(data)
       .then((res) => {
         if (res?.success) {
           toast.custom((t) => (
             <CustomToaster
               t={t}
               type={"success"}
-              text={`Category updated successfully`}
+              text={`FAQ updated successfully`}
             />
           ));
           popupOption?.onClose();
           popupOption.setIsUpdating(Math.random());
-          setIsCategoryUpdating(false);
+          setIsFaqUpdating(false);
         }
       })
       .catch((err) => {
-        errorHandler({ err, setLoading: setIsCategoryUpdating });
+        errorHandler({ err, setLoading: setIsFaqUpdating });
       });
   };
 
-  if (isCategoryCreating || isCategoryUpdating) {
+  if (isFaqCreating || isFaqUpdating) {
     return <CustomLoading />;
   }
   return (
@@ -145,15 +146,15 @@ const CreateAndUpdateCategory = () => {
       <div>
         {/* NAME */}
         <CustomField
-          defaultValue={formData?.name}
+          defaultValue={formData?.question}
           disable={false}
           fieldClassName={"w-full"}
-          error={errors?.name}
-          id={"name"}
-          label={"Name"}
-          name={"name"}
+          error={errors?.question}
+          id={"question"}
+          label={"Question"}
+          name={"question"}
           onChange={handleFormChange}
-          placeholder={"Name"}
+          placeholder={"Question"}
           type={"text"}
           wrapperClassName={"w-full"}
           required={true}
@@ -161,33 +162,33 @@ const CreateAndUpdateCategory = () => {
 
         {/* DESCRIPTION */}
         <CustomTextareaField
-          defaultValue={formData?.description}
+          defaultValue={formData?.answer}
           disable={false}
           fieldClassName={"w-full"}
-          error={errors?.description}
-          id={"description"}
-          label={"Description"}
-          name={"description"}
+          error={errors?.answer}
+          id={"answer"}
+          label={"Answer"}
+          name={"answer"}
           onChange={handleFormChange}
-          placeholder={"Description"}
+          placeholder={"Answer"}
           type={"text"}
           wrapperClassName={"w-full"}
         />
       </div>
       <div className="flex flex-col md:flex-row w-full justify-center md:justify-end items-center py-5 gap-2">
         <button
-          disabled={isCategoryCreating || isCategoryUpdating}
+          disabled={isFaqCreating || isFaqUpdating}
           onClick={popupOption?.onClose}
           className="btn w-full md:btn-wide btn-outline btn-primary"
         >
           Cancel
         </button>
         <button
-          disabled={isCategoryCreating || isCategoryUpdating}
+          disabled={isFaqCreating || isFaqUpdating}
           onClick={handleSubmit}
           className="btn w-full md:btn-wide btn-primary"
         >
-          {isCategoryCreating || isCategoryUpdating ? (
+          {isFaqCreating || isFaqUpdating ? (
             <ButtonSpinner />
           ) : popupOption?.data ? (
             "Update"
@@ -200,4 +201,4 @@ const CreateAndUpdateCategory = () => {
   );
 };
 
-export default CreateAndUpdateCategory;
+export default CreateAndUpdateFaq;
