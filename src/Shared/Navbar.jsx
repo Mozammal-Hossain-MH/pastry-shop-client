@@ -7,26 +7,26 @@ import { FiAlignLeft, FiX } from "react-icons/fi";
 import { IoIosLogOut } from "react-icons/io";
 import { OutsideClickHandler } from "./OutsideClickHandler";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
-  const { login, setLogin } = useAuthContext();
+  const { user, logout } = useAuthContext();
+  console.log({ user });
   const [sidebar, setSidebar] = useState(false);
-  const [currentTab, setCurrentTab] = useState("login");
-  // const { data } = useCart(user?.email);
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState("");
   const [openDropdown, seOpenDropdown] = useState(false);
 
   const handleLogin = () => {
-    setLogin(true);
-    setCurrentTab("login");
+    router.push("/login");
     setSidebar(false);
   };
   const handleRegister = () => {
-    setLogin(true);
-    setCurrentTab("register");
+    router.push("/register");
     setSidebar(false);
   };
   const handleCloseMenu = () => {
+    setIsExpanded("");
     setSidebar(false);
   };
 
@@ -125,9 +125,7 @@ const Navbar = () => {
             className={`flex justify-between items-center gap-2 w-full xl:w-auto`}
           >
             <div onClick={() => setSidebar(true)} className={`xl:hidden `}>
-              <FiAlignLeft
-                className={`text-4xl text-btn-primary transition-transform hover:scale-105 active:scale-95`}
-              />
+              <FiAlignLeft className={`text-4xl text-primary `} />
             </div>
             <img
               className={`w-20 h-auto xl:hidden`}
@@ -172,23 +170,32 @@ const Navbar = () => {
               )}
             </ul>
           </div>
-          <div className={`flex items-center gap-4 sm:gap-10`}>
-            {false ? (
+          <div className={`flex items-center gap-6`}>
+            {user ? (
               <button
                 data-tip={`Sign Out`}
-                onClick={() => logout()}
-                className={`tooltip tooltip-custom-primary tooltip-bottom items-center gap-1 hidden xl:flex px-3  sm:px-6 py-2 sm:py-3 bg-btn-primary text-base-300 rounded-full font-bold transition-transform hover:scale-105 active:scale-95`}
+                onClick={logout}
+                className={`tooltip tooltip-custom-primary tooltip-bottom items-center gap-1 hidden xl:flex px-3  sm:px-6 py-2 sm:py-3 bg-base-200 text-base-300 rounded-full font-bold `}
               >
-                Logout <IoIosLogOut className={`text-2xl`} />
+                Logout
               </button>
             ) : (
-              <button
-                data-tip="Sign In"
-                onClick={() => setLogin(true)}
-                className={`tooltip tooltip-custom-primary tooltip-bottom items-center gap-1 hidden xl:flex px-3 sm:px-6 py-2 sm:py-3 bg-btn-primary text-base-300 rounded-full font-bold transition-transform hover:scale-105 active:scale-95`}
-              >
-                Login <CiLogin className={`text-2xl`} />
-              </button>
+              <div className={`flex items-center gap-3`}>
+                <button
+                  data-tip="Sign In"
+                  onClick={() => router.push("/login")}
+                  className={`tooltip  tooltip-custom-primary tooltip-bottom items-center gap-1 hidden xl:flex px-3 sm:px-6 py-2 sm:py-3 bg-base-200 text-base-300 rounded-full font-bold `}
+                >
+                  Login
+                </button>
+                <button
+                  data-tip="register"
+                  onClick={() => router.push("/register")}
+                  className={`tooltip tooltip-custom-primary tooltip-bottom items-center gap-1 hidden xl:flex px-3 sm:px-6 py-2 sm:py-3 bg-base-200 text-base-300 rounded-full font-bold `}
+                >
+                  Register
+                </button>
+              </div>
             )}
           </div>
           <OutsideClickHandler
@@ -208,7 +215,7 @@ const Navbar = () => {
                 />
                 <FiX
                   onClick={() => setSidebar(false)}
-                  className={`text-4xl m-5 p-2 rounded-full w-auto text-primary bg-secondary transition-transform hover:scale-105 active:scale-95`}
+                  className={`text-4xl m-5 p-2 rounded-full w-auto text-primary bg-secondary `}
                 />
               </div>
               <nav className="flex-1 p-4 overflow-y-auto">
@@ -250,16 +257,16 @@ const Navbar = () => {
                   )}
                 </ul>
               </nav>
-              <div className="p-4 border-t dark:border-gray-700">
+              <div className="p-4 border-t dark:border-gray-700 pb-5">
                 <div className="flex items-center">
                   <div className="h-9 w-9 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                    {/* <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <span className="text-sm font-medium text-primary ">
                       {user?.name
                         ?.split(" ")
                         ?.map((char) => char.charAt(0).toUpperCase())}
-                    </span> */}
+                    </span>
                   </div>
-                  {false ? (
+                  {user ? (
                     <div className="ml-3">
                       <p className="text-sm font-medium text-heading-main ">
                         {user?.name}
@@ -287,65 +294,30 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-                <button
-                  onClick={false ? logout : handleLogin}
-                  className="w-full mt-4 px-4 py-2 text-sm font-medium bg-transparent text-heading-main hover:text-gray-100 hover:bg-gray-700 rounded-md flex items-center justify-start"
-                >
-                  {/* {user ? (
-                    <LogOut className="mr-2 h-4 w-4" />
-                  ) : (
-                    <LogIn className="mr-2 h-4 w-4" />
-                  )} */}
-                  {false ? "Logout" : "Login"}
-                </button>
+                {user ? (
+                  <button
+                    onClick={logout}
+                    className="w-full mt-4 px-4 py-2 text-sm font-medium bg-transparent text-heading-main hover:text-gray-100 hover:bg-gray-700 rounded-md flex items-center justify-start"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <div className={`grid grid-cols-2 gap-3`}>
+                    <button
+                      onClick={handleLogin}
+                      className="w-full mt-4 px-4 py-2 text-sm font-medium bg-transparent text-heading-main hover:text-gray-100 hover:bg-gray-700 rounded-md flex items-center justify-start"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={handleRegister}
+                      className="w-full mt-4 px-4 py-2 text-sm font-medium bg-transparent text-heading-main hover:text-gray-100 hover:bg-gray-700 rounded-md flex items-center justify-start"
+                    >
+                      Register
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
-          </OutsideClickHandler>
-
-          <OutsideClickHandler
-            onOutsideClick={() => {
-              setLogin(false);
-            }}
-            className={`w-[320px] md:w-[640px] h-screen bg-primary fixed transition-all ${
-              login ? "right-0" : "-right-[320px] md:-right-[640px]"
-            } bottom-0 top-0 shadow-xl z-[1000]`}
-          >
-            <div
-              onClick={() => setLogin(false)}
-              className={`text-4xl m-5 p-2 rounded-full w-fit text-btn-primary bg-secondary transition-transform hover:scale-105 active:scale-95`}
-            >
-              <FiX />
-            </div>
-            <div className={`h-screen w-full`}>
-              {/* {currentTab === "login" && (
-                <Login setCurrentTab={setCurrentTab} setLogin={setLogin} />
-              )}
-              {currentTab === "register" && (
-                <Register setCurrentTab={setCurrentTab} />
-              )}
-              {currentTab === "enter_code" && (
-                <Code
-                  setCurrentTab={setCurrentTab}
-                  passwordResetData={passwordResetData}
-                  setPasswordResetData={setPasswordResetData}
-                />
-              )}
-              {currentTab === "reset_password" && (
-                <ResetPassword
-                  setCurrentTab={setCurrentTab}
-                  currentTab={currentTab}
-                  setFormData={setPasswordResetData}
-                  formData={passwordResetData}
-                />
-              )}
-              {currentTab === "enter_new_password" && (
-                <EnterNewPassword
-                  setCurrentTab={setCurrentTab}
-                  currentTab={currentTab}
-                  setFormData={setPasswordResetData}
-                  formData={passwordResetData}
-                />
-              )} */}
             </div>
           </OutsideClickHandler>
         </div>
@@ -374,12 +346,12 @@ function NavItem({ icon, href, children, handler }) {
   );
 }
 
-function NavItemForDesktop({ icon, href, children }) {
+function NavItemForDesktop({ icon, href, handler, children }) {
   return (
-    <li>
+    <li onClick={handler}>
       <Link
         href={href}
-        className="flex items-center rounded-lg  px-3 py-2 gap-2 font-semibold text-heading-main hover:text-gray-100 hover:bg-gray-700"
+        className="flex items-center px-3 py-2 gap-2 font-semibold text-heading-main hover:text-gray-100 hover:bg-gray-700"
       >
         {icon}
         {children}
@@ -424,7 +396,7 @@ function NavItemWithChildren({
               collapsed: { opacity: 0, height: 0 },
             }}
             transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-            className="ml-6 mt-2 space-y-2 overflow-hidden xl:bg-primary xl:absolute xl:w-[180px]"
+            className="ml-6 xl:ml-0 mt-2 space-y-2 overflow-hidden xl:bg-base-200 xl:absolute xl:w-[180px]"
           >
             {children}
           </motion.ul>

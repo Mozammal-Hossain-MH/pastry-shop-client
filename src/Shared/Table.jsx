@@ -338,7 +338,7 @@ export default function Table({
                 >
                   <div className={`w-full flex justify-center pt-1 pb-5`}>
                     {actions?.length > 0 ? (
-                      <td className="text-right p-0">
+                      <div className="text-right p-0">
                         {/* {!isFullActionList ? (
                           <CustomDropDownForTable
                             isDeleteDisabled={data?.is_system_default}
@@ -387,7 +387,7 @@ export default function Table({
                             ))}
                         </div>
                         {/* )} */}
-                      </td>
+                      </div>
                     ) : (
                       ""
                     )}

@@ -10,6 +10,7 @@ export default function CustomToaster({
   errors = {},
   pageId = "",
 }) {
+  console.log({ errors });
   useEffect(() => {
     const timeOut = setTimeout(() => {
       toast.dismiss(t.id);
