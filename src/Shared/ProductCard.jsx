@@ -5,10 +5,18 @@ import Button from "./Button";
 import "./sharedAnimation.css";
 import { getFullImageLink } from "@/Utils/getFullImageLink";
 import { useRouter } from "next/navigation";
+import { postCart, updateQuantity } from "@/apis/carts";
+import { useAuthContext } from "@/Context/ProjectProvider";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+import CustomToaster from "./CustomToaster";
+import { errorHandler } from "@/Utils/errorHandler";
 
 const ProductCard = ({ product }) => {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
+  const { user } = useAuthContext();
+  const [quantity, setQuantity] = useState(1);
 
   const useDeviceWidth = () => {
     const [width, setWidth] = useState(() =>
@@ -30,9 +38,53 @@ const ProductCard = ({ product }) => {
 
     return width;
   };
+
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const handleAddToCart = () => {
+    setIsAddingToCart(true);
+    postCart({ productId: product?.id, quantity: quantity, email: user?.email })
+      .then((res) => {
+        if (res?.success) {
+          toast.custom((t) => (
+            <CustomToaster
+              t={t}
+              type={"success"}
+              text={`Product added to the cart successfully`}
+            />
+          ));
+          setIsAddingToCart(false);
+        } else {
+          const info = {
+            exists: res?.exists,
+            quantity: res?.exists?.quantity + res?.quantity,
+          };
+
+          updateQuantity(info)
+            .then((res) => {
+              if (res?.success) {
+                toast.custom((t) => (
+                  <CustomToaster
+                    t={t}
+                    type={"success"}
+                    text={`Product already in the cart but we increased the quantity. You can decrease it from cart`}
+                  />
+                ));
+                setIsAddingToCart(false);
+              }
+            })
+            .catch((err) => {
+              setIsAddingToCart(false);
+              errorHandler(err, setIsAddingToCart);
+            });
+        }
+      })
+      .catch((err) => {
+        setIsAddingToCart(false);
+        console.log({ err });
+      });
+  };
   return (
     <div
-      onClick={() => router.push(`/products/${product?.id}`)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative image-hover cursor-pointer"
@@ -61,11 +113,16 @@ const ProductCard = ({ product }) => {
         }
         className="my-5 flex flex-col justify-center items-center transition-all cart-button"
       >
-        <div onClick={() => router.push(`/`)} className={`z-10`}>
-          <Button text={"Add to cart"} />
+        <div className={`z-10`}>
+          <Button
+            text={"Add to cart"}
+            handler={handleAddToCart}
+            isLoading={isAddingToCart}
+          />
         </div>
       </motion.div>
       <motion.div
+        onClick={() => router.push(`/products/${product?.id}`)}
         // initial={{ y: -100 }}
         animate={
           useDeviceWidth() > 768 ? (isHovered ? { y: 0 } : { y: -70 }) : ""

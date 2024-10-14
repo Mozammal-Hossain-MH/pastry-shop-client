@@ -45,7 +45,7 @@ export default function CustomToaster({
             {type === "info" && (
               <p className="text-sm font-medium text-white ">Tips</p>
             )}
-            <p className="mt-1 text-sm text-white">
+            <div className="mt-1 text-sm text-white">
               {type !== "error" ? (
                 <>
                   {pageId ? `${pageId} - ` : ""}
@@ -56,7 +56,8 @@ export default function CustomToaster({
                   {Object.keys(errors).length > 0 ? (
                     <>
                       <h5 className="font-semibold text-white">
-                        {pageId ? `${pageId} - ` : ""}Oh no
+                        {pageId ? `${pageId} - ` : ""}Unfortunately you have
+                        some errors
                       </h5>
                       <ul className="list-decimal ml-5 text-white">{text}</ul>
                       <ul className="list-decimal ml-5 text-white">
@@ -69,13 +70,15 @@ export default function CustomToaster({
                     </>
                   ) : (
                     <>
-                      <h5 className="font-semibold">Oh no</h5>
+                      <h5 className="font-semibold">
+                        Unfortunately you have some errors
+                      </h5>
                       <ul className="list-decimal ml-5 text-white">{text}</ul>
                     </>
                   )}
                 </>
               )}
-            </p>
+            </div>
           </div>
         </div>
       </div>

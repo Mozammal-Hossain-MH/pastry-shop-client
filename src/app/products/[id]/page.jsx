@@ -80,8 +80,10 @@ const page = async ({ params }) => {
             </p>
             <p>{product?.data?.data?.description?.slice(0, 300)}...</p>
             <div className={`space-x-5`}>
-              <Quantity />
-              <ButtonWrapper text={"Add to cart"} />
+              <ButtonWrapper
+                text={"Add to cart"}
+                id={product?.data?.data?.id}
+              />
             </div>
             <p className={`text-[20px]`}>
               <span className={`text-primary font-bold`}>Categories: </span>

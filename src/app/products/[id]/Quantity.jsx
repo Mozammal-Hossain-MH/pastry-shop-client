@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-const Quantity = () => {
-  const [quantity, setQuantity] = useState(1);
-
+const Quantity = ({ quantity, setQuantity }) => {
   const handleQuantityDown = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);

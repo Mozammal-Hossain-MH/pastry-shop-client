@@ -1,5 +1,5 @@
-const { default: CustomToaster } = require("@/Shared/CustomToaster");
-const { default: toast } = require("react-hot-toast");
+import CustomToaster from "@/Shared/CustomToaster";
+import toast from "react-hot-toast";
 
 export const validationErrorHandler = (newErrors) => {
   if (Object.keys(newErrors).length > 0) {

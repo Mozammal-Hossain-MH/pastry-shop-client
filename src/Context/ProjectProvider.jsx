@@ -19,6 +19,34 @@ const ProjectProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUserComing, setIsUserComing] = useState();
 
+  // CART
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [checkedId, setCheckedId] = useState([]);
+
+  const checkoutTotal = selectedItems?.reduce((accumulator, currentProduct) => {
+    const perProductTotal = currentProduct?.product?.discountPrice
+      ? parseFloat(currentProduct?.product?.discountPrice)
+      : parseFloat(currentProduct?.product?.regularPrice) *
+        parseInt(currentProduct?.quantity);
+    return accumulator + perProductTotal;
+  }, 0);
+
+  const checkoutQuantity = selectedItems?.reduce(
+    (accumulator, currentProduct) => {
+      return accumulator + parseInt(currentProduct?.quantity);
+    },
+    0
+  );
+
+  console.log({
+    checkoutQuantity,
+    checkoutTotal,
+    selectedItems,
+    setSelectedItems,
+    checkedId,
+    setCheckedId,
+  });
+
   useEffect(() => {
     setIsLoading(true);
     getUser()
@@ -103,6 +131,14 @@ const ProjectProvider = ({ children }) => {
     // ADMIN
     isAdmin,
     setIsAdmin,
+
+    // CART
+    checkoutQuantity,
+    checkoutTotal,
+    selectedItems,
+    setSelectedItems,
+    checkedId,
+    setCheckedId,
   };
   return (
     <ProjectContext.Provider value={value}>
@@ -157,6 +193,25 @@ export const useAuthContext = () => {
   };
 };
 
+export const useCartContext = () => {
+  const {
+    checkoutQuantity,
+    checkoutTotal,
+    selectedItems,
+    setSelectedItems,
+    checkedId,
+    setCheckedId,
+  } = useContext(ProjectContext);
+
+  return {
+    checkoutQuantity,
+    checkoutTotal,
+    selectedItems,
+    setSelectedItems,
+    checkedId,
+    setCheckedId,
+  };
+};
 export const usePopupContext = () => {
   const { popupOption, setPopupOption } = useContext(ProjectContext);
 
