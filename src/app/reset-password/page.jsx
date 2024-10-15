@@ -1,7 +1,7 @@
 "use client";
 import { isUserExist } from "@/apis/auth";
 import NewPassword from "@/Shared/auth/NewPassword";
-import ResetPasswordCode from "@/Shared/auth/resetPasswordCode";
+import ResetPasswordCode from "@/Shared/auth/ResetPasswordCode";
 import Button from "@/Shared/Button";
 import CustomField from "@/Shared/Fields/CustomField";
 import { validationErrorHandler } from "@/Utils/validationErrorHandler";
