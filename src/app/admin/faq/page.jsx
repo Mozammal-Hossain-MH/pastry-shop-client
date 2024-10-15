@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const { popupOption, setPopupOption } = usePopupContext();
 
@@ -147,7 +147,7 @@ const page = () => {
             >
               Home
             </span>{" "}
-            // <span>All FAQ</span>
+            {"//"} <span>All FAQ</span>
           </div>
         }
         heading={"FAQS"}
@@ -186,4 +186,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

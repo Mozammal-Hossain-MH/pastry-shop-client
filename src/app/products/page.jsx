@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { RiSoundModuleFill } from "react-icons/ri";
 
-const page = () => {
+const Page = () => {
   const [sidebar, setSidebar] = useState(false);
   const [filters, setFilters] = useState({ page: 1, perPage: 10 });
 
@@ -64,7 +64,7 @@ const page = () => {
                 <span className={`text-primary cursor-pointer`}>
                   <NavigateComponent text="Home" route="/" />
                 </span>{" "}
-                // <span>Products</span>
+                {"//"} <span>Products</span>
               </div>
             }
             heading={"All Products"}
@@ -126,8 +126,8 @@ const page = () => {
             <div
               className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 `}
             >
-              {products?.data?.map((product) => (
-                <ProductCard product={product} />
+              {products?.data?.map((product, i) => (
+                <ProductCard key={i} product={product} />
               ))}
             </div>
             {/* PAGINATION */}
@@ -143,4 +143,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

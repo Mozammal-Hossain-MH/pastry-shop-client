@@ -118,7 +118,7 @@ const ResetPasswordCode = ({ data, setCurrentTab }) => {
       <div className={`space-y-2 text-center`}>
         <h2 className={`text-xl font-bold`}>Enter Verification Code</h2>
         <p className={`font-medium text-[14px]`}>
-          We've Sent a Code to {data?.email}
+          We have Sent a Code to {data?.email}
         </p>
       </div>
       <div className={`space-y-2 flex flex-col justify-center items-center`}>

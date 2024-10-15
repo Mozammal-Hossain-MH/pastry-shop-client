@@ -1,8 +1,5 @@
-import useAxiosPublic from "@/Hooks/useAxiosPublic";
-import useAxiosSecure from "@/Hooks/useAxiosSecure";
+import axios from "axios";
 
-const axiosSecure = useAxiosSecure();
-const axiosPublic = useAxiosPublic();
 // ----------------------------------------------------------------
 // UPLOAD API
 // ----------------------------------------------------------------
@@ -13,11 +10,15 @@ export const uploadProductPic = async (files) => {
       formData.append(`files`, file);
     });
     console.log(files);
-    const res = await axiosSecure.post("/products/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/upload`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -29,8 +30,8 @@ export const uploadProductPic = async (files) => {
 export const getAllProducts = async (filters) => {
   const { page, perPage } = filters;
   try {
-    const res = await axiosPublic.get(
-      `/products?page=${page}&perPage=${perPage}`
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?page=${page}&perPage=${perPage}`
     );
     return res?.data;
   } catch (error) {
@@ -38,30 +39,33 @@ export const getAllProducts = async (filters) => {
   }
 };
 
-export const getServerSideProps = async (context) => {
-  const { id } = context.params; // Extract the 'id' from params
-  try {
-    const res = await axiosPublic.get(`/products?id=${id}`);
-    return {
-      props: {
-        product: res?.data,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: "Product not found",
-      },
-    };
-  }
-};
+// export const getServerSideProps = async (context) => {
+//   const { id } = context.params; // Extract the 'id' from params
+//   try {
+//     const res = await axiosPublic.get(`/products?id=${id}`);
+//     return {
+//       props: {
+//         product: res?.data,
+//       },
+//     };
+//   } catch (error) {
+//     return {
+//       props: {
+//         error: "Product not found",
+//       },
+//     };
+//   }
+// };
 
 // ----------------------------------------------------------------
 // POST API
 // ----------------------------------------------------------------
 export const postProduct = async (formData) => {
   try {
-    const res = await axiosSecure.post(`/products`, formData);
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -72,7 +76,10 @@ export const postProduct = async (formData) => {
 // ----------------------------------------------------------------
 export const updateProduct = async (formData) => {
   try {
-    const res = await axiosSecure.put(`/products`, formData);
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -84,7 +91,9 @@ export const updateProduct = async (formData) => {
 // ----------------------------------------------------------------
 export const deleteProduct = async ({ id }) => {
   try {
-    const res = await axiosSecure.delete(`/products/${id}`);
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`
+    );
     return res?.data;
   } catch (error) {
     throw error;

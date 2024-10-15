@@ -17,7 +17,7 @@ import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const { popupOption, setPopupOption } = usePopupContext();
 
@@ -170,7 +170,7 @@ const page = () => {
             >
               Home
             </span>{" "}
-            // <span>All Categories</span>
+            {"//"} <span>All Categories</span>
           </div>
         }
         heading={"Categories"}
@@ -224,4 +224,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

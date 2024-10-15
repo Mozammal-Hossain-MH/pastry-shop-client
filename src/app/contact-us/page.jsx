@@ -46,7 +46,7 @@ const page = async () => {
                 <span className={`text-primary cursor-pointer`}>
                   <NavigateComponent text="Home" route="/" />
                 </span>{" "}
-                // <span>Contact us</span>
+                {"//"} <span>Contact us</span>
               </div>
             }
             heading={"Contacts"}
@@ -72,7 +72,7 @@ const page = async () => {
       <div className={`max-w-screen-xl mx-auto px-5 space-y-5`}>
         <Heading isSubHeading={false} heading={"Frequently asked questions"} />
         {faqs?.data?.map((faq, i) => (
-          <div className="join join-vertical w-full rounded-lg">
+          <div key={i} className="join join-vertical w-full rounded-lg">
             <div className="collapse collapse-arrow join-item  border border-primary">
               <input type="checkbox" name="my-accordion-4" />
               <div className="collapse-title columns-lg font-bold text-primary">

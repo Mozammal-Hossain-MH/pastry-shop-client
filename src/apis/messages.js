@@ -1,16 +1,12 @@
-import useAxiosPublic from "@/Hooks/useAxiosPublic";
-import useAxiosSecure from "@/Hooks/useAxiosSecure";
-
-const axiosSecure = useAxiosSecure();
-const axiosPublic = useAxiosPublic();
+import axios from "axios";
 
 // ----------------------------------------------------------------
 // GET API
 // ----------------------------------------------------------------
 export const getAllMessages = async ({ page, perPage }) => {
   try {
-    const res = await axiosSecure.get(
-      `/messages?page=${page}&perPage=${perPage}`
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/messages?page=${page}&perPage=${perPage}`
     );
     return res?.data;
   } catch (error) {
@@ -23,7 +19,10 @@ export const getAllMessages = async ({ page, perPage }) => {
 // ----------------------------------------------------------------
 export const postMessage = async (formData) => {
   try {
-    const res = await axiosSecure.post(`/messages`, formData);
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/messages`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -35,7 +34,9 @@ export const postMessage = async (formData) => {
 // ----------------------------------------------------------------
 export const deleteMessage = async ({ id }) => {
   try {
-    const res = await axiosSecure.delete(`/messages/${id}`);
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/messages/${id}`
+    );
     return res?.data;
   } catch (error) {
     throw error;

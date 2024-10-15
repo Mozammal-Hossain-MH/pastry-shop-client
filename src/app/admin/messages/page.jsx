@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 
   // ALL SELECTED IDs
@@ -119,7 +119,7 @@ const page = () => {
             >
               Home
             </span>{" "}
-            // <span>All Messages</span>
+            {"//"} <span>All Messages</span>
           </div>
         }
         heading={"Messages"}
@@ -167,4 +167,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -28,15 +28,15 @@ const page = async ({ params }) => {
                 <span className={`text-primary cursor-pointer`}>
                   <NavigateComponent text="Home" route="/" />
                 </span>{" "}
-                //{" "}
+                {"//"}{" "}
                 <span className={`text-primary cursor-pointer`}>
                   <NavigateComponent text="Products" route="/products" />
                 </span>{" "}
-                //{" "}
+                {"//"}{" "}
                 <span className={`text-primary cursor-pointer`}>
                   <NavigateComponent text="Chocolate" route="/" />
                 </span>{" "}
-                // <span>All Products</span>
+                {"//"} <span>All Products</span>
               </div>
             }
             heading={product?.data?.data?.name}

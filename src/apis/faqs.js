@@ -1,15 +1,11 @@
-import useAxiosPublic from "@/Hooks/useAxiosPublic";
-import useAxiosSecure from "@/Hooks/useAxiosSecure";
-
-const axiosSecure = useAxiosSecure();
-const axiosPublic = useAxiosPublic();
+import axios from "axios";
 
 // ----------------------------------------------------------------
 // GET API
 // ----------------------------------------------------------------
 export const getAllFaqs = async () => {
   try {
-    const res = await axiosPublic.get(`/faqs`);
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/faqs`);
     return res?.data;
   } catch (error) {
     throw error;
@@ -21,7 +17,10 @@ export const getAllFaqs = async () => {
 // ----------------------------------------------------------------
 export const postFaq = async (formData) => {
   try {
-    const res = await axiosSecure.post(`/faqs`, formData);
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/faqs`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -32,7 +31,10 @@ export const postFaq = async (formData) => {
 // ----------------------------------------------------------------
 export const updateFaq = async (formData) => {
   try {
-    const res = await axiosSecure.put(`/faqs`, formData);
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/faqs`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -44,7 +46,9 @@ export const updateFaq = async (formData) => {
 // ----------------------------------------------------------------
 export const deleteFaq = async ({ id }) => {
   try {
-    const res = await axiosSecure.delete(`/faqs/${id}`);
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/faqs/${id}`
+    );
     return res?.data;
   } catch (error) {
     throw error;

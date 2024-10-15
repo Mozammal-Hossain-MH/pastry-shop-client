@@ -86,7 +86,7 @@ const Page = () => {
                 <span className={`text-primary cursor-pointer`}>
                   <NavigateComponent text="Home" route="/" />
                 </span>{" "}
-                // <span>Cart</span>
+                {"//"} <span>Cart</span>
               </div>
             }
             heading={"Cart"}
@@ -156,8 +156,8 @@ const Page = () => {
               Your cart is empty
             </p>
             <p className={`font-medium text-[14px] text-body-sub mb-3`}>
-              Looks like you haven't added anything to your cart. Go ahead and
-              explore shop
+              Looks like you {"haven't"} added anything to your cart. Go ahead
+              and explore shop
             </p>
             <div className={`flex justify-center items-center`}>
               <Button

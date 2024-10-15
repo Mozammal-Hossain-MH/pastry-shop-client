@@ -11,8 +11,9 @@ const CheckoutStep2 = ({ handleNextStep, handlePrevStep }) => {
       <Heading isSubHeading={false} heading={"Payment Information"} />
       <div className={`p-5 bg-primary text-base-300 font-bold`}>Summary</div>
       <div className={`px-5 flex flex-col gap-3`}>
-        {selectedItems.map((item) => (
+        {selectedItems.map((item, i) => (
           <div
+            key={i}
             className={`flex justify-between items-center text-[14px] sm:text-xl`}
           >
             <p className={` font-semibold`}>{item?.product?.name}</p>{" "}

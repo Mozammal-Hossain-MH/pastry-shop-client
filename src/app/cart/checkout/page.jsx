@@ -10,7 +10,7 @@ import { useAuthContext, useCartContext } from "@/Context/ProjectProvider";
 import { loadStripe } from "@stripe/stripe-js";
 import { postCheckout, postPayment } from "@/apis/carts";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const {
     checkoutQuantity,
@@ -207,4 +207,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-const page = () => {
+const Page = () => {
   const [currentTab, setCurrentTab] = useState("register");
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -152,7 +152,7 @@ const page = () => {
             {/* LOGIN AREA */}
             <div className={`max-w-[360px] mx-auto flex flex-col gap-6`}>
               <h2 className={`text-lg font-bold`}>
-                Let's get your account set up
+                Lets get your account set up
               </h2>
               <div>
                 {/* NAME */}
@@ -238,4 +238,4 @@ const page = () => {
   }
 };
 
-export default page;
+export default Page;

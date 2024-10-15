@@ -1,15 +1,13 @@
-import useAxiosPublic from "@/Hooks/useAxiosPublic";
-import useAxiosSecure from "@/Hooks/useAxiosSecure";
-
-const axiosSecure = useAxiosSecure();
-const axiosPublic = useAxiosPublic();
+import axios from "axios";
 
 // ----------------------------------------------------------------
 // GET API
 // ----------------------------------------------------------------
 export const getAllCategories = async () => {
   try {
-    const res = await axiosPublic.get(`/categories`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -21,7 +19,10 @@ export const getAllCategories = async () => {
 // ----------------------------------------------------------------
 export const postCategory = async (formData) => {
   try {
-    const res = await axiosSecure.post(`/categories`, formData);
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -32,7 +33,10 @@ export const postCategory = async (formData) => {
 // ----------------------------------------------------------------
 export const updateCategory = async (formData) => {
   try {
-    const res = await axiosSecure.put(`/categories`, formData);
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`,
+      formData
+    );
     return res?.data;
   } catch (error) {
     throw error;
@@ -44,7 +48,9 @@ export const updateCategory = async (formData) => {
 // ----------------------------------------------------------------
 export const deleteCategory = async ({ id }) => {
   try {
-    const res = await axiosSecure.delete(`/categories/${id}`);
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories/${id}`
+    );
     return res?.data;
   } catch (error) {
     throw error;

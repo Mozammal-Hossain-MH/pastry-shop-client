@@ -16,7 +16,7 @@ import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const { popupOption, setPopupOption } = usePopupContext();
 
@@ -47,7 +47,7 @@ const page = () => {
         setIsProductLoading(false);
         console.log({ err });
       });
-  }, [isUpdating]);
+  }, [isUpdating, filters]);
 
   // HANDLE PER PAGE
   const setPerPage = (count) => {
@@ -209,7 +209,7 @@ const page = () => {
             >
               Home
             </span>{" "}
-            // <span>All Products</span>
+            {"//"} <span>All Products</span>
           </div>
         }
         heading={"Products"}
@@ -281,4 +281,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

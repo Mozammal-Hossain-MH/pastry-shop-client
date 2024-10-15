@@ -12,7 +12,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const [currentTab, setCurrentTab] = useState("login");
   const { setUser, setIsUserComing } = useAuthContext();
@@ -222,4 +222,4 @@ const page = () => {
   }
 };
 
-export default page;
+export default Page;
