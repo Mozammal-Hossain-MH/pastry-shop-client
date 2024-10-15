@@ -116,7 +116,7 @@ const Page = () => {
               Quantity: {checkoutQuantity}
             </h1>
             <h1 className={`font-medium text-body-sub`}>
-              Total: ${checkoutTotal}
+              Total: ${checkoutTotal.toFixed(2)}
             </h1>
             {Location ? (
               <h1 className={`font-medium text-body-sub`}>

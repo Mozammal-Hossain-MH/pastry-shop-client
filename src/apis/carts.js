@@ -28,6 +28,22 @@ export const postCart = async (formData) => {
     throw error;
   }
 };
+export const postCheckout = async (formData) => {
+  try {
+    const res = await axiosSecure.post(`/carts/checkout`, formData);
+    return res?.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const postPayment = async (products) => {
+  try {
+    const res = await axiosSecure.post(`/carts/create-payment`, products);
+    return res?.data;
+  } catch (error) {
+    throw error;
+  }
+};
 // ----------------------------------------------------------------
 // PUT API
 // ----------------------------------------------------------------

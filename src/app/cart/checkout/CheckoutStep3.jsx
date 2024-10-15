@@ -26,7 +26,7 @@ const CheckoutStep3 = ({ formData, handleNextStep, handlePrevStep }) => {
           />
         )}
         <ViewField title={"Payment Method"} value={"Stripe"} />
-        <ViewField title={"Payment Amount"} value={checkoutTotal} />
+        <ViewField title={"Payment Amount"} value={`$${checkoutTotal}`} />
       </div>
       <ViewField
         title={"Additional Information"}

@@ -5,22 +5,23 @@ import { useState } from "react";
 import CheckoutStep1 from "./CheckoutStep1";
 import CheckoutStep2 from "./CheckoutStep2";
 import CheckoutStep3 from "./CheckoutStep3";
+import { useRouter } from "next/navigation";
+import { useAuthContext, useCartContext } from "@/Context/ProjectProvider";
+import { loadStripe } from "@stripe/stripe-js";
+import { postCheckout, postPayment } from "@/apis/carts";
 
 const page = () => {
+  const router = useRouter();
+  const {
+    checkoutQuantity,
+    checkoutTotal,
+    selectedItems,
+    setSelectedItems,
+    checkedId,
+    setCheckedId,
+  } = useCartContext();
+  const { user } = useAuthContext();
   const [step, setStep] = useState(1);
-
-  const handleNextStep = (validateForm) => {
-    if (step < 3) {
-      // if (validateForm()) {
-      //   setStep((prev) => prev + 1);
-      // }
-      setStep((prev) => prev + 1);
-    }
-  };
-
-  const handlePrevStep = () => {
-    setStep((prev) => prev - 1);
-  };
 
   const [formData, setFormData] = useState({
     step1: {
@@ -37,6 +38,55 @@ const page = () => {
     },
   });
   console.log({ formData });
+
+  const handleNextStep = async (validateForm) => {
+    if (step === 1) {
+      if (validateForm()) {
+        setStep((prev) => prev + 1);
+      }
+    } else if (step === 2) {
+      setStep((prev) => prev + 1);
+    } else {
+      const checkout = {
+        userEmail: user?.email,
+        checkoutInfo: { ...formData?.step1 },
+        paymentInfo: selectedItems?.map((item) => ({
+          productId: item?.productId,
+          quantity: item?.quantity,
+        })),
+        paymentMethod: "stripe",
+        totalPayableAmount: checkoutTotal,
+        isPaid: false,
+      };
+      postCheckout(checkout)
+        .then(async (res) => {
+          console.log({ resFromCheckout: res });
+          if (res?.success) {
+            const stripe = await loadStripe(
+              "pk_test_51OvAqwRsMbnL3bnv7y7SR3Fd92uQWSOdsSmF3qU1UR4EKt5ezzk2zYPxMHXlge0pFR69OFjkjvrFeEcAUoHq2J2G00162icdrz"
+            );
+
+            const info = {
+              products: selectedItems,
+            };
+            console.log({ info });
+            const res = await postPayment(info);
+
+            const result = await stripe.redirectToCheckout({
+              sessionId: res?.id,
+            });
+            console.log({ result });
+          }
+        })
+        .catch((err) => {
+          console.log({ err });
+        });
+    }
+  };
+
+  const handlePrevStep = () => {
+    setStep((prev) => prev - 1);
+  };
 
   // VALIDATION
   const [errors1, setErrors1] = useState({});
