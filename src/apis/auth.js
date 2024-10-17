@@ -6,7 +6,10 @@ import axios from "axios";
 export const getUser = async () => {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/info`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/info`,
+      {
+        withCredentials: true,
+      }
     );
     return res?.data;
   } catch (error) {
@@ -57,7 +60,10 @@ export const jwt = async (user) => {
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/jwt`,
-      user
+      user,
+      {
+        withCredentials: true, // Add this line to include cookies
+      }
     );
     return res?.data;
   } catch (error) {
