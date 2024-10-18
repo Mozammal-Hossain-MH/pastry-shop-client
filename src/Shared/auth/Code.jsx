@@ -74,10 +74,10 @@ const Code = ({ data }) => {
     const previousInput = document.querySelector(`#${previousId}`);
 
     if (value === "") {
-      previousInput.focus(); // Move focus to the previous input
+      previousInput?.focus(); // Move focus to the previous input
     } else {
       if (nextInput) {
-        nextInput.focus(); // Programmatically focus the element
+        nextInput?.focus(); // Programmatically focus the element
       }
     }
     if (

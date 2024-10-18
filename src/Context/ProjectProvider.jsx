@@ -79,7 +79,7 @@ const ProjectProvider = ({ children }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
-          ?.post("/auth/logout")
+          ?.post("/auth/logout", {}, { withCredentials: true })
           .then((res) => {
             console.log({ logoutRes: res });
             if (res?.data?.success) {
