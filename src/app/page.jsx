@@ -146,6 +146,7 @@ export default async function page() {
       />
 
       {/* FEATURED PRODUCTS */}
+
       <div className="space-y-10">
         <Heading
           subHeading={"Online Store"}
