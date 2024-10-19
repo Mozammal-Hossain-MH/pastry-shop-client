@@ -90,6 +90,7 @@ const ProductCard = ({ product }) => {
       className="relative image-hover cursor-pointer"
     >
       <div
+        onClick={() => router.push(`/products/${product?.id}`)}
         // style={{ backgroundImage: `url(/dots.png)` }}
         className="overflow-hidden rotating-background"
       >

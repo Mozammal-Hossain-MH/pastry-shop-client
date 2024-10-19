@@ -98,6 +98,13 @@ const Navbar = () => {
           // Icon: <Tag className="h-4 w-4" />,
           handler: handleCloseMenu,
         },
+        {
+          id: 5,
+          name: "Users",
+          path: "/admin/users",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
       ],
     },
     {

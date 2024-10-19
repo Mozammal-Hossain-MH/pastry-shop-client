@@ -1,4 +1,5 @@
 "use client";
+import { getAllCategories } from "@/apis/categories";
 import { deleteProduct, getAllProducts } from "@/apis/products";
 import { usePopupContext } from "@/Context/ProjectProvider";
 import Button from "@/Shared/Button";
@@ -9,6 +10,7 @@ import SplitDescription from "@/Shared/SplitDescription";
 import Table from "@/Shared/Table";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
 import { deleteData } from "@/Utils/deleteData";
+import { errorHandler } from "@/Utils/errorHandler";
 import { getFullImageLink } from "@/Utils/getFullImageLink";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -46,8 +48,28 @@ const Page = () => {
       .catch((err) => {
         setIsProductLoading(false);
         console.log({ err });
+        errorHandler({ err, isLoading: isProductLoading });
       });
   }, [isUpdating, filters]);
+
+  const [categories, setCategories] = useState([]);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+  useEffect(() => {
+    setIsCategoryLoading(true);
+    getAllCategories()
+      .then((res) => {
+        if (res?.data) {
+          console.log({ res });
+          setCategories(res);
+          setIsCategoryLoading(false);
+        }
+      })
+      .catch((err) => {
+        setIsCategoryLoading(false);
+        console.log({ err });
+        errorHandler({ err, isLoading: isCategoryLoading });
+      });
+  }, []);
 
   // HANDLE PER PAGE
   const setPerPage = (count) => {
@@ -258,13 +280,15 @@ const Page = () => {
               />
             ),
             price: d?.price,
-            category_table: (
-              <div className={`flex gap-1 capitalize`}>
-                {d?.category?.split("_")?.map((c, i) => (
-                  <span key={i}>{c}</span>
-                ))}
-              </div>
-            ),
+            category_table: categories?.data?.find((c) => c?.id === d?.category)
+              ?.name,
+            // category_table: (
+            //   <div className={`flex gap-1 capitalize`}>
+            //     {d?.category?.split("_")?.map((c, i) => (
+            //       <span key={i}>{c}</span>
+            //     ))}
+            //   </div>
+            // ),
           }))}
           actions={actions}
           cols={cols}

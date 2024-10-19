@@ -1,99 +1,28 @@
-import Button from "@/Shared/Button";
+import NavigateHandler from "@/Shared/Buttons/NavigateHandler";
 import FixedBgComponent from "@/Shared/FixedBgComponent";
 import Heading from "@/Shared/Heading";
 import ProductCard from "@/Shared/ProductCard";
-import ProductCardOnCategory from "@/Shared/ProductCardOnCategory";
-import Tabs from "@/Shared/Tabs";
 import axios from "axios";
+import CategorySection from "./CategorySection";
 import Slider from "./slider";
 
 export default async function page() {
-  const products = [
-    {
-      id: 1,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 42.49,
-      offerPrice: null,
-    },
-    {
-      id: 2,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 13.49,
-      offerPrice: null,
-    },
-    {
-      id: 3,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 25.49,
-      offerPrice: null,
-    },
-    {
-      id: 4,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 12.99,
-      offerPrice: 11.49,
-    },
-    {
-      id: 5,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 12.99,
-      offerPrice: 11.49,
-    },
-    {
-      id: 6,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 12.99,
-      offerPrice: 11.49,
-    },
-    {
-      id: 7,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 12.99,
-      offerPrice: 11.49,
-    },
-    {
-      id: 8,
-      name: "Milk Chocolate With Peanuts",
-      description: "Nulla vulputate interdum aliquam",
-      image: "/vanilla.png",
-      regularPrice: 12.99,
-      offerPrice: 11.49,
-    },
-  ];
   const productByRandom = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get/random?limit=4`
   );
+  const categories = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`
+  );
 
-  console.log({ productByRandom: productByRandom?.data });
+  console.log({
+    productByRandom: productByRandom?.data,
+    categories: categories?.data?.data[0],
+  });
   //
-  const tabs = [
-    {
-      id: 1,
-      name: "Cakes",
-    },
-    {
-      id: 2,
-      name: "Cookies",
-    },
-    {
-      id: 3,
-      name: "Pastries",
-    },
-  ];
+  const tabs = categories?.data?.data?.map((category) => ({
+    id: category?.id,
+    name: category?.name,
+  }));
   // SLIDER IMAGES
   const images = [
     {
@@ -126,25 +55,6 @@ export default async function page() {
         borderClr={"#000"}
       />
 
-      {/* FIXED COMPONENT */}
-      <FixedBgComponent
-        component={
-          <div className="text-3xl md:text-6xl font-bold text-base-300 space-y-5 text-center relative">
-            <p>Made with love</p>{" "}
-            <p>
-              <span className="text-primary">unique sweets</span> for gourmet
-            </p>
-            <div
-              className={`w-full flex justify-center items-center absolute -top-10 rotating-square`}
-            >
-              <p
-                className={`h-32 md:h-48 w-32 md:w-48 border border-primary `}
-              ></p>
-            </div>
-          </div>
-        }
-      />
-
       {/* FEATURED PRODUCTS */}
 
       <div className="space-y-10">
@@ -158,24 +68,39 @@ export default async function page() {
           ))}
         </div>
         <div className="flex flex-col justify-center items-center">
-          <Button text={"Online Store"} paddings="px-10 py-5" />
+          <NavigateHandler text={"Online Store"} route={"/products"} />
         </div>
+      </div>
+
+      {/* FIXED COMPONENT */}
+      <div className={`relative`}>
+        <FixedBgComponent
+          component={
+            <div className="text-3xl md:text-6xl font-bold text-base-300 space-y-5 text-center relative">
+              <p>Made with love</p>{" "}
+              <p>
+                <span className="text-primary">unique sweets</span> for gourmet
+              </p>
+              <div
+                className={`w-full flex justify-center items-center absolute -top-10 rotating-square`}
+              >
+                <p
+                  className={`h-32 md:h-48 w-32 md:w-48 border border-primary `}
+                ></p>
+              </div>
+            </div>
+          }
+        />
+        {/* <img
+          className={`absolute -top-10 right-0 left-0`}
+          src="/dark_temp.png"
+          alt=""
+        /> */}
       </div>
 
       {/* CATEGORY */}
       <div className={`px-5 md:px-10 mb-20`}>
-        <div className="space-y-10">
-          <Heading subHeading={"Online Store"} heading={"Explore Categories"} />
-          <Tabs tabs={tabs} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {products?.map((product) => (
-              <ProductCardOnCategory key={product?.id} product={product} />
-            ))}
-          </div>
-          <div className="flex flex-col justify-center items-center">
-            <Button text={"See More"} paddings="px-10 py-5" />
-          </div>
-        </div>
+        <CategorySection tabs={tabs} />
       </div>
     </div>
   );

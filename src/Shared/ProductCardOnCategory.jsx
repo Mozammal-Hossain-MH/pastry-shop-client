@@ -1,3 +1,4 @@
+import { getFullImageLink } from "@/Utils/getFullImageLink";
 import React from "react";
 
 const ProductCardOnCategory = ({ product }) => {
@@ -5,7 +6,7 @@ const ProductCardOnCategory = ({ product }) => {
     <div className={`flex items-center`}>
       <img
         className="h-20 w-20 rounded-full"
-        src={product?.image}
+        src={getFullImageLink(product?.images[0]?.file, "Products")}
         alt={product?.name}
       />
       <div className={`flex-grow`}>
@@ -16,7 +17,13 @@ const ProductCardOnCategory = ({ product }) => {
           <div className={`h-[1px] bg-primary mx-3 flex-grow `}></div>
           <p>{product?.regularPrice}</p>
         </div>
-        <p>{product?.description}</p>
+        <p>
+          {product?.description
+            ? product?.description?.length > 100
+              ? `${product?.description?.slice(0, 100)}...`
+              : product?.description
+            : "N/A"}
+        </p>
       </div>
     </div>
   );

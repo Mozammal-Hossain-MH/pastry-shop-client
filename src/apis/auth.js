@@ -3,6 +3,19 @@ import axios from "axios";
 // ----------------------------------------------------------------
 // GET API
 // ----------------------------------------------------------------
+export const getAllUsers = async ({ page, perPage }) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/users/all?page=${page}&perPage=${perPage}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return res?.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const getUser = async () => {
   try {
     const res = await axios.get(
@@ -77,6 +90,17 @@ export const verifyUser = async ({ email, otp }) => {
   try {
     const res = await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/verify/${email}?otp=${otp}`
+    );
+    return res?.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateUser = async (data) => {
+  try {
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/${data?.email}`,
+      data
     );
     return res?.data;
   } catch (error) {

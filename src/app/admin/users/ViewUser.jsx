@@ -2,9 +2,9 @@ import { usePopupContext } from "@/Context/ProjectProvider";
 import SplitDescription from "@/Shared/SplitDescription";
 import ViewField from "@/Shared/ViewField";
 import { formatRole } from "@/Utils/formatRole";
-import { getDate } from "@/Utils/getDate";
+import { getDate, getTime } from "@/Utils/getDate";
 
-const ViewProduct = () => {
+const ViewUser = () => {
   const { popupOption } = usePopupContext();
   console.log({ popupOption });
   return (
@@ -14,39 +14,32 @@ const ViewProduct = () => {
     >
       <div className=" grid grid-cols-2 gap-5">
         <ViewField title={"Name"} value={popupOption?.data?.name} />
+
+        <ViewField title={"Phone"} value={popupOption?.data?.phone} />
+        <ViewField title={"Role"} value={popupOption?.data?.role} />
         <ViewField
-          title={"Price"}
-          value={
-            popupOption?.data?.discountPrice &&
-            popupOption?.data?.discountPrice > 0
-              ? `$${popupOption?.data?.discountPrice}`
-              : `$${popupOption?.data?.regularPrice}`
-          }
+          title={"Is Verified"}
+          value={popupOption?.data?.isVerified ? "Yes" : "No"}
         />
-        <ViewField title={"Stock Level"} value={popupOption?.data?.inStock} />
+        <div className={`col-span-2`}>
+          <ViewField title={"Email"} value={popupOption?.data?.email} />
+        </div>
         <ViewField
-          title={"Category"}
-          value={formatRole(popupOption?.data?.category_table)}
-        />
-        <ViewField
-          title={"Created At"}
+          title={"Created Date"}
           value={getDate(popupOption?.data?.createdAt)}
         />
         <ViewField
-          title={"Last Updated"}
+          title={"Created Time"}
+          value={getTime(popupOption?.data?.createdAt)}
+        />
+        <ViewField
+          title={"Updated Date"}
           value={getDate(popupOption?.data?.updatedAt)}
         />
-        <div className={`col-span-2`}>
-          <ViewField
-            title={"Description"}
-            value={
-              <SplitDescription
-                text={popupOption?.data?.description}
-                length={200}
-              />
-            }
-          />
-        </div>
+        <ViewField
+          title={"Updated Time"}
+          value={getTime(popupOption?.data?.updatedAt)}
+        />
       </div>
       <div className="flex flex-col md:flex-row w-full justify-center md:justify-end items-center mt-5 gap-2">
         <button
@@ -60,4 +53,4 @@ const ViewProduct = () => {
   );
 };
 
-export default ViewProduct;
+export default ViewUser;

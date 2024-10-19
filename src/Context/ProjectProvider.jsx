@@ -4,6 +4,7 @@ import CreateAndUpdateProduct from "@/app/admin/all-products/CreateAndUpdateProd
 import ViewProduct from "@/app/admin/all-products/ViewProduct";
 import CreateAndUpdateCategory from "@/app/admin/categories/CreateAndUpdateCategory";
 import CreateAndUpdateFaq from "@/app/admin/faq/CreateAndUpdateFaq";
+import ViewUser from "@/app/admin/users/ViewUser";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import CustomPopup from "@/Shared/CustomPopup";
 import FileViewer from "@/Shared/FileViewer";
@@ -153,6 +154,7 @@ const ProjectProvider = ({ children }) => {
             {popupOption?.type === "viewFile" && <FileViewer />}
             {popupOption?.type === "category" && <CreateAndUpdateCategory />}
             {popupOption?.type === "faq" && <CreateAndUpdateFaq />}
+            {popupOption?.type === "viewUser" && <ViewUser />}
           </>
         }
       />

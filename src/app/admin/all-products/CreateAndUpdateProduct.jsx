@@ -1,18 +1,19 @@
 "use client";
-import { useAuthContext, usePopupContext } from "@/Context/ProjectProvider";
+import { usePopupContext } from "@/Context/ProjectProvider";
 import CustomLoading from "@/Shared/CustomLoading";
 import CustomToaster from "@/Shared/CustomToaster";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import ButtonSpinner from "@/Shared/ButtonSpinner";
 import CustomField from "@/Shared/Fields/CustomField";
 import CustomFileUploader from "@/Shared/Fields/CustomFileUploader";
 import CustomMultiSelect from "@/Shared/Fields/CustomMultiSelect";
 import CustomNumberField from "@/Shared/Fields/CustomNumberField";
 import CustomTextareaField from "@/Shared/Fields/CustomTextAreaField";
-import { postProduct, updateProduct, uploadProductPic } from "@/apis/products";
-import ButtonSpinner from "@/Shared/ButtonSpinner";
 import { errorHandler } from "@/Utils/errorHandler";
+import { getAllCategories } from "@/apis/categories";
+import { postProduct, updateProduct, uploadProductPic } from "@/apis/products";
 
 const CreateAndUpdateProduct = () => {
   const { popupOption } = usePopupContext();
@@ -20,13 +21,20 @@ const CreateAndUpdateProduct = () => {
   const [formData, setFormData] = useState({
     id: popupOption?.data ? popupOption?.data?.id : "",
     name: popupOption?.data ? popupOption?.data?.name : "",
-    regularPrice: popupOption?.data ? popupOption?.data?.regularPrice : "",
-    discountPrice: popupOption?.data ? popupOption?.data?.discountPrice : "",
-    inStock: popupOption?.data ? popupOption?.data?.inStock : "",
+    regularPrice: popupOption?.data ? popupOption?.data?.regularPrice : null,
+    discountPrice: popupOption?.data ? popupOption?.data?.discountPrice : null,
+    inStock: popupOption?.data ? popupOption?.data?.inStock : null,
     category: popupOption?.data ? popupOption?.data?.category : "",
     description: popupOption?.data ? popupOption?.data?.description : "",
     images: popupOption?.data ? popupOption?.data?.images : [],
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      category: popupOption?.data?.category,
+    }));
+  }, [popupOption?.data?.category, formData?.category]);
   const [filesToUpload, setFilesToUpload] = useState([]);
   const [localImage, setLocalImage] = useState(
     popupOption?.data
@@ -37,23 +45,29 @@ const CreateAndUpdateProduct = () => {
       : []
   );
   console.log({ formData, localImage, filesToUpload });
-  const options = [
-    {
-      id: 1,
-      name: "Chocolate",
-      label: "chocolate",
-    },
-    {
-      id: 2,
-      name: "Milk",
-      label: "milk",
-    },
-    {
-      id: 3,
-      name: "Honey",
-      label: "honey",
-    },
-  ];
+
+  const [data, setData] = useState([]);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+  useEffect(() => {
+    setIsCategoryLoading(true);
+    getAllCategories()
+      .then((res) => {
+        if (res?.data) {
+          console.log({ res });
+          setData(res);
+          setIsCategoryLoading(false);
+        }
+      })
+      .catch((err) => {
+        setIsCategoryLoading(false);
+        console.log({ err });
+        errorHandler({ err, isLoading: isCategoryLoading });
+      });
+  }, []);
+  const options = data?.data?.map((category) => ({
+    id: category?.id,
+    name: category?.name,
+  }));
 
   // VALIDATION
   const [errors, setErrors] = useState({});
@@ -83,7 +97,7 @@ const CreateAndUpdateProduct = () => {
     }
 
     //   VALIDATE CATEGORY
-    if (!formData.category || formData.category.trim() === "") {
+    if (!formData.category) {
       newErrors.category = "Category is required";
     }
 
@@ -334,18 +348,19 @@ const CreateAndUpdateProduct = () => {
           wrapperClassName={"w-full"}
           required={true}
         />
-
+        {console.log({
+          selectedOne: options?.filter((m) => m?.id === formData?.category),
+        })}
         {/* CATEGORY */}
         <CustomMultiSelect
           disable={false}
           label={"Category"}
-          loading={false}
+          // loading={isCategoryLoading}
           placeholder="Select Category"
-          selectedValues={options?.filter(
-            (m) => m?.label === formData?.category
-          )}
+          selectedValues={options?.filter((m) => m?.id === formData?.category)}
           setSelectedValues={(e) => {
-            setFormData({ ...formData, category: e[0]?.label || null });
+            console.log({ e });
+            setFormData({ ...formData, category: e[0]?.id });
           }}
           options={options}
           singleSelect
