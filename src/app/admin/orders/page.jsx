@@ -167,6 +167,7 @@ const Page = () => {
           </button>
           {["pending", "processing", "shipped"]?.map((status, i) => (
             <div
+              key={i}
               onClick={() => handleChangeStatus(status)}
               className={`py-3 font-bold ${
                 status === "pending"
