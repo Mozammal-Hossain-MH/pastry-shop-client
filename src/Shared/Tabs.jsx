@@ -14,7 +14,7 @@ const Tabs = ({ tabs, activeTab, setActiveTab }) => {
               : ""
           }`}
         >
-          <p>{tab?.name}</p>
+          <p className={`text-primary`}>{tab?.name}</p>
           <div className={`w-full ${activeTab === tab?.id ? "opacity-0" : ""}`}>
             <div className={`wavy-line-tabs`}></div>
           </div>

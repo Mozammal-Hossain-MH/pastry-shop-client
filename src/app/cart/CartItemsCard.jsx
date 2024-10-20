@@ -57,7 +57,9 @@ const CartItemsCard = ({ item, setIsUpdating, handleChecked, checked }) => {
     };
 
     updateQuantity(info)
-      .then((res) => {})
+      .then((res) => {
+        setIsUpdating(Math.random());
+      })
       .catch((err) => {
         errorHandler(err);
       });
@@ -74,7 +76,7 @@ const CartItemsCard = ({ item, setIsUpdating, handleChecked, checked }) => {
   return (
     <div
       className={`flex items-center gap-2 sm:gap-5 shadow-xl max-w-[800px] w-full p-1 sm:px-4 sm:py-2 rounded-[5px] relative`}
-      key={item?._id}
+      key={item?.id}
     >
       <input
         checked={checked?.map((i) => i)?.includes(item?.id)}

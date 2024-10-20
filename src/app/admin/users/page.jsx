@@ -7,7 +7,7 @@ import ButtonLoading from "@/Shared/ButtonLoading";
 import CustomLoading from "@/Shared/CustomLoading";
 import CustomToaster from "@/Shared/CustomToaster";
 import Heading from "@/Shared/Heading";
-import { Pagination } from "@/Shared/Pagination";
+import { Pagination } from "@/Shared/Paginations/Pagination";
 import Table from "@/Shared/Table";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
 import { deleteData } from "@/Utils/deleteData";

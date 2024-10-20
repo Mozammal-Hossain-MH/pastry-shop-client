@@ -3,7 +3,7 @@ import { getAllCategories } from "@/apis/categories";
 import { getAllProducts } from "@/apis/products";
 import CustomLoading from "@/Shared/CustomLoading";
 import FixedBgComponent from "@/Shared/FixedBgComponent";
-import { Pagination } from "@/Shared/Pagination";
+import { Pagination } from "@/Shared/Paginations/Pagination";
 import ProductCard from "@/Shared/ProductCard";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
 import NavigateComponent from "@/Utils/navigate";

@@ -26,7 +26,10 @@ const CheckoutStep3 = ({ formData, handleNextStep, handlePrevStep }) => {
           />
         )}
         <ViewField title={"Payment Method"} value={"Stripe"} />
-        <ViewField title={"Payment Amount"} value={`$${checkoutTotal}`} />
+        <ViewField
+          title={"Payment Amount"}
+          value={`$${checkoutTotal?.toFixed(2)}`}
+        />
       </div>
       <ViewField
         title={"Additional Information"}

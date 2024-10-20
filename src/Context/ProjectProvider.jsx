@@ -4,6 +4,7 @@ import CreateAndUpdateProduct from "@/app/admin/all-products/CreateAndUpdateProd
 import ViewProduct from "@/app/admin/all-products/ViewProduct";
 import CreateAndUpdateCategory from "@/app/admin/categories/CreateAndUpdateCategory";
 import CreateAndUpdateFaq from "@/app/admin/faq/CreateAndUpdateFaq";
+import ViewOrder from "@/app/admin/orders/ViewOrder";
 import ViewUser from "@/app/admin/users/ViewUser";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import CustomPopup from "@/Shared/CustomPopup";
@@ -26,9 +27,11 @@ const ProjectProvider = ({ children }) => {
 
   const checkoutTotal = selectedItems?.reduce((accumulator, currentProduct) => {
     const perProductTotal = currentProduct?.product?.discountPrice
-      ? parseFloat(currentProduct?.product?.discountPrice)
+      ? parseFloat(currentProduct?.product?.discountPrice) *
+        parseInt(currentProduct?.quantity)
       : parseFloat(currentProduct?.product?.regularPrice) *
         parseInt(currentProduct?.quantity);
+
     return accumulator + perProductTotal;
   }, 0);
 
@@ -155,6 +158,7 @@ const ProjectProvider = ({ children }) => {
             {popupOption?.type === "category" && <CreateAndUpdateCategory />}
             {popupOption?.type === "faq" && <CreateAndUpdateFaq />}
             {popupOption?.type === "viewUser" && <ViewUser />}
+            {popupOption?.type === "viewOrder" && <ViewOrder />}
           </>
         }
       />

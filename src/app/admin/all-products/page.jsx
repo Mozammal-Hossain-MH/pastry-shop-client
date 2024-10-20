@@ -5,7 +5,7 @@ import { usePopupContext } from "@/Context/ProjectProvider";
 import Button from "@/Shared/Button";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
-import { Pagination } from "@/Shared/Pagination";
+import { Pagination } from "@/Shared/Paginations/Pagination";
 import SplitDescription from "@/Shared/SplitDescription";
 import Table from "@/Shared/Table";
 import TableComponentHeading from "@/Shared/TableComponentHeading";

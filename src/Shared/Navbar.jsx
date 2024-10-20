@@ -61,6 +61,23 @@ const Navbar = () => {
         },
       ],
     },
+    {
+      id: 3,
+      name: "Dashboard",
+      path: "/dashboard",
+      // Icon: <ShoppingBag className="h-4 w-4" />,
+      handler: handleCloseMenu,
+      permission: true,
+      Children: [
+        {
+          id: 1,
+          name: "My Orders",
+          path: "/dashboard/order-history",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
+      ],
+    },
 
     {
       id: 4,
@@ -81,6 +98,13 @@ const Navbar = () => {
           id: 2,
           name: "Categories",
           path: "/admin/categories",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
+        {
+          id: 2,
+          name: "Orders",
+          path: "/admin/orders",
           // Icon: <Tag className="h-4 w-4" />,
           handler: handleCloseMenu,
         },

@@ -40,14 +40,14 @@ const CheckoutStep2 = ({ handleNextStep, handlePrevStep }) => {
         className={`flex justify-between items-center px-5 text-[14px] sm:text-xl`}
       >
         <p className={` font-semibold`}>Subtotal</p>{" "}
-        <p className={` text-primary`}>${checkoutTotal}</p>
+        <p className={` text-primary`}>${checkoutTotal?.toFixed(2)}</p>
       </div>
       <div className={`border-b-2 border-primary`}></div>
       <div
         className={`flex justify-between items-center px-5 text-[14px] sm:text-xl`}
       >
         <p className={` font-semibold`}>Total</p>{" "}
-        <p className={` text-primary`}>${checkoutTotal}</p>
+        <p className={` text-primary`}>${checkoutTotal?.toFixed(2)}</p>
       </div>
 
       <div className={`text-xl font-semibold space-y-3`}>

@@ -3,7 +3,7 @@ import { deleteMessage, getAllMessages } from "@/apis/messages";
 import { usePopupContext } from "@/Context/ProjectProvider";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
-import { Pagination } from "@/Shared/Pagination";
+import { Pagination } from "@/Shared/Paginations/Pagination";
 import Table from "@/Shared/Table";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
 import { deleteData } from "@/Utils/deleteData";

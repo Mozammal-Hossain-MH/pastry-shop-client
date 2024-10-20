@@ -8,10 +8,7 @@ const ViewProduct = () => {
   const { popupOption } = usePopupContext();
   console.log({ popupOption });
   return (
-    <div
-      data-auto={`container-viewUser`}
-      className={`px-2 py-5 flex flex-col justify-between gap-10 h-[70vh]`}
-    >
+    <div className={`px-2 py-5 flex flex-col justify-between gap-10 h-[70vh]`}>
       <div className=" grid grid-cols-2 gap-5">
         <ViewField title={"Name"} value={popupOption?.data?.name} />
         <ViewField

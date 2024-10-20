@@ -1,21 +1,22 @@
 "use client";
-import { deleteCategory, getAllCategories } from "@/apis/categories";
-import { deleteProduct, getAllProducts } from "@/apis/products";
-import { usePopupContext } from "@/Context/ProjectProvider";
-import Button from "@/Shared/Button";
+import {
+  getAllCheckouts,
+  getAllCheckoutsForAdmin,
+  updateStatus,
+} from "@/apis/carts";
+import { useAuthContext, usePopupContext } from "@/Context/ProjectProvider";
+import ButtonLoading from "@/Shared/ButtonLoading";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
 import { Pagination } from "@/Shared/Paginations/Pagination";
-import SplitDescription from "@/Shared/SplitDescription";
 import Table from "@/Shared/Table";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
-import { deleteData } from "@/Utils/deleteData";
-import { getFullImageLink } from "@/Utils/getFullImageLink";
+import { errorHandler } from "@/Utils/errorHandler";
+import { formatRole } from "@/Utils/formatRole";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
-import { RiEdit2Fill } from "react-icons/ri";
+import { FiX } from "react-icons/fi";
 
 const Page = () => {
   const router = useRouter();
@@ -23,30 +24,33 @@ const Page = () => {
 
   // ALL SELECTED IDs
   const [selectedIds, setSelectedIds] = useState([]);
-  const [isCategoryLoading, setIsCategoryLoading] = useState(false);
-  console.log({ isCategoryLoading });
+  const [isOrderLoading, setIsOrderLoading] = useState(false);
+  console.log({ isOrderLoading });
   const [data, setData] = useState([]);
   const [isUpdating, setIsUpdating] = useState();
+  const { user } = useAuthContext();
 
   // FILTERS
   const [filters, setFilters] = useState({
     perPage: 20,
     page: 1,
+    email: user?.email,
   });
 
   useEffect(() => {
-    setIsCategoryLoading(true);
-    getAllCategories(filters)
+    setIsOrderLoading(true);
+    getAllCheckouts(filters)
       .then((res) => {
         if (res?.data) {
           console.log({ res });
           setData(res);
-          setIsCategoryLoading(false);
+          setIsOrderLoading(false);
         }
       })
       .catch((err) => {
-        setIsCategoryLoading(false);
+        setIsOrderLoading(false);
         console.log({ err });
+        errorHandler({ err, isLoading: setIsOrderLoading });
       });
   }, [isUpdating]);
 
@@ -55,48 +59,14 @@ const Page = () => {
     setFilters({ ...filters, perPage: count, page: 1 });
   };
 
-  // HANDLE DELETE PRODUCT
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const handleDeleteProduct = (data) => {
-    deleteData({
-      handler: deleteCategory,
-      data,
-      deleteMsg: "Category deleted successfully",
-      setIsUpdating,
-      setIsDeleteLoading,
-    });
-  };
-
   // HANDLE VIEW
   const handleView = (data) => {
     setPopupOption({
       ...popupOption,
       open: true,
-      type: "viewProduct",
-      title: "Product Details",
+      type: "viewOrder",
+      title: "Order Details",
       data: data,
-    });
-  };
-
-  // HANDLE CREATE
-  const handleCreate = () => {
-    setPopupOption({
-      ...popupOption,
-      open: true,
-      type: "category",
-      title: "Add New Product",
-      setIsUpdating: setIsUpdating,
-    });
-  };
-  // HANDLE EDIT
-  const handleEdit = (data) => {
-    setPopupOption({
-      ...popupOption,
-      open: true,
-      type: "category",
-      title: "Edit Product",
-      data: data,
-      setIsUpdating: setIsUpdating,
     });
   };
 
@@ -108,23 +78,6 @@ const Page = () => {
       Icon: AiFillEye,
       colorClass: "text-red-600",
       backgroundColorClass: "bg-red-200",
-      disabledOn: [],
-    },
-    {
-      name: "edit",
-      handler: handleEdit,
-      Icon: RiEdit2Fill,
-      colorClass: "text-secondary",
-      backgroundColorClass: "bg-secondary-content",
-      disabledOn: [],
-    },
-    {
-      name: "delete",
-      handler: handleDeleteProduct,
-      Icon: MdDelete,
-      colorClass: "text-red-600",
-      backgroundColorClass: "bg-red-200",
-      isLoading: isDeleteLoading,
       disabledOn: [],
     },
   ]);
@@ -139,22 +92,41 @@ const Page = () => {
       isMainField: true,
     },
     {
-      name: "Name",
-      attribute_name: "name",
+      name: "Order Id",
+      attribute_name: "orderId",
+      minWidth: 20,
+      show: true,
+      isMainField: true,
+    },
+    {
+      name: "Email",
+      attribute_name: "userEmail",
       minWidth: 20,
       show: true,
       isMainField: true,
     },
 
     {
-      name: "Description",
-      attribute_name: "description_table",
-      minWidth: 30,
+      name: "Amount",
+      attribute_name: "totalPayableAmount",
+      minWidth: 20,
+      show: true,
+    },
+    {
+      name: "Payment Method",
+      attribute_name: "paymentMethod_table",
+      minWidth: 20,
+      show: true,
+    },
+    {
+      name: "Status",
+      attribute_name: "status_table",
+      minWidth: 10,
       show: true,
     },
   ]);
 
-  if (isCategoryLoading) {
+  if (isOrderLoading) {
     return <CustomLoading />;
   }
   return (
@@ -170,25 +142,19 @@ const Page = () => {
             >
               Home
             </span>{" "}
-            {"//"} <span>All Categories</span>
+            {"//"} <span>All Orders</span>
           </div>
         }
-        heading={"Categories"}
+        heading={"Orders"}
       />
       {/* HEADING AREA */}
       <div className={`flex justify-between items-center`}>
         <div>
-          <Heading
-            isSubHeading={false}
-            isWave={false}
-            heading={"All Categories"}
-          />
+          <Heading isSubHeading={false} isWave={false} heading={"All Orders"} />
           <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "Categories" : "Category"}{" "}
-            Found
+            Total {data?.total} {data?.total > 1 ? "Orders" : "Order"} Found
           </p>
         </div>
-        <Button text={"Add"} handler={handleCreate} />
       </div>
       {/* TABLE AREA */}
       <div className={`space-y-10`}>
@@ -200,14 +166,29 @@ const Page = () => {
           setPageNo={(data) => setFilters({ ...filters, page: data })}
           setPerPage={setPerPage}
           perPage={filters?.perPage}
-          isLoading={isCategoryLoading}
+          isLoading={isOrderLoading}
           rows={data?.data?.map((d, i) => ({
             ...d,
             count: (filters?.page - 1) * filters?.perPage + i + 1,
-            name: d?.name,
-            description_table: (
-              <SplitDescription text={d?.description} length={30} />
+            paymentMethod_table: formatRole(d?.paymentMethod),
+            status_table: (
+              <div
+                className={`px-3 py-1 font-bold rounded-full inline-block ${
+                  d?.status === "pending"
+                    ? "bg-primary"
+                    : d?.status === "processing"
+                    ? "bg-lime-500"
+                    : "bg-green-500"
+                }  shadow-lg shadow-base-100  text-base-300 capitalize flex justify-center items-center`}
+              >
+                {d?.status}
+              </div>
             ),
+            //   isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
+            //     <ButtonLoading />
+            //   ) : (
+
+            //   ),
           }))}
           actions={actions}
           cols={cols}

@@ -2,13 +2,19 @@ import NavigateHandler from "@/Shared/Buttons/NavigateHandler";
 import FixedBgComponent from "@/Shared/FixedBgComponent";
 import Heading from "@/Shared/Heading";
 import ProductCard from "@/Shared/ProductCard";
+import HomeSearchWrapper from "@/Shared/SearchFields/HomeSearchWrapper";
 import axios from "axios";
 import CategorySection from "./CategorySection";
 import Slider from "./slider";
 
-export default async function page() {
+export default async function page({ searchParams }) {
+  console.log({ searchParams });
   const productByRandom = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get/random?limit=4`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/get/random?page=${
+      searchParams?.page || 1
+    }&perPage=${searchParams?.perPage || 8}&searchKey=${
+      searchParams?.searchKey
+    }`
   );
   const categories = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`
@@ -44,7 +50,7 @@ export default async function page() {
   ];
   const slides = images?.map((image) => image?.image);
   return (
-    <div className="flex flex-col gap-20 overflow-hidden">
+    <div className="flex flex-col gap-20 overflow-hidden pb-20">
       {/* SLIDER */}
       <Slider
         prevNextBtn
@@ -62,11 +68,17 @@ export default async function page() {
           subHeading={"Online Store"}
           heading={"Discover Sweet Delicious"}
         />
+        <HomeSearchWrapper />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {productByRandom?.data?.data?.map((product) => (
             <ProductCard key={product?.id} product={product} />
           ))}
         </div>
+        {/* <PaginationForServer
+          total={productByRandom?.data?.total}
+          page={searchParams?.page || 1}
+          perPage={searchParams?.perPage || 2}
+        /> */}
         <div className="flex flex-col justify-center items-center">
           <NavigateHandler text={"Online Store"} route={"/products"} />
         </div>

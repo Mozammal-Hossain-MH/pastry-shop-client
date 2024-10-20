@@ -21,6 +21,7 @@ const Page = () => {
     checkedId,
     setCheckedId,
   } = useCartContext();
+  console.log({ selectedItems });
   const router = useRouter();
   const { user } = useAuthContext();
   const [data, setData] = useState([]);
@@ -93,9 +94,7 @@ const Page = () => {
           />
         }
       />
-      {isCartLoading ? (
-        <CustomLoading />
-      ) : data?.data?.length > 0 ? (
+      {data?.data?.length > 0 ? (
         <div
           className={`grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-6 w-full px-5 md:px-10`}
         >

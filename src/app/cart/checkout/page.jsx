@@ -5,22 +5,9 @@ import { useState } from "react";
 import CheckoutStep1 from "./CheckoutStep1";
 import CheckoutStep2 from "./CheckoutStep2";
 import CheckoutStep3 from "./CheckoutStep3";
-import { useRouter } from "next/navigation";
-import { useAuthContext, useCartContext } from "@/Context/ProjectProvider";
-import { loadStripe } from "@stripe/stripe-js";
-import { postCheckout, postPayment } from "@/apis/carts";
+import PaymentStep4 from "./PaymentStep4";
 
 const Page = () => {
-  const router = useRouter();
-  const {
-    checkoutQuantity,
-    checkoutTotal,
-    selectedItems,
-    setSelectedItems,
-    checkedId,
-    setCheckedId,
-  } = useCartContext();
-  const { user } = useAuthContext();
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -44,43 +31,8 @@ const Page = () => {
       if (validateForm()) {
         setStep((prev) => prev + 1);
       }
-    } else if (step === 2) {
+    } else if (step === 2 || step === 3) {
       setStep((prev) => prev + 1);
-    } else {
-      const checkout = {
-        userEmail: user?.email,
-        checkoutInfo: { ...formData?.step1 },
-        paymentInfo: selectedItems?.map((item) => ({
-          productId: item?.productId,
-          quantity: item?.quantity,
-        })),
-        paymentMethod: "stripe",
-        totalPayableAmount: checkoutTotal,
-        isPaid: false,
-      };
-      postCheckout(checkout)
-        .then(async (res) => {
-          console.log({ resFromCheckout: res });
-          if (res?.success) {
-            const stripe = await loadStripe(
-              "pk_test_51OvAqwRsMbnL3bnv7y7SR3Fd92uQWSOdsSmF3qU1UR4EKt5ezzk2zYPxMHXlge0pFR69OFjkjvrFeEcAUoHq2J2G00162icdrz"
-            );
-
-            const info = {
-              products: selectedItems,
-            };
-            console.log({ info });
-            const res = await postPayment(info);
-
-            const result = await stripe.redirectToCheckout({
-              sessionId: res?.id,
-            });
-            console.log({ result });
-          }
-        })
-        .catch((err) => {
-          console.log({ err });
-        });
     }
   };
 
@@ -150,29 +102,21 @@ const Page = () => {
               serial: 1,
               id: 1,
               title: "Shipping Information",
-              onCLickHandler: () => {
-                setStep(1);
-              },
             },
             {
               serial: 2,
               id: 2,
               title: "Payment Information",
-              onCLickHandler: () => {
-                if (validateForm1()) {
-                  setStep(2);
-                }
-              },
             },
             {
               serial: 3,
               id: 3,
               title: "Order Review",
-              onCLickHandler: () => {
-                if (validateForm()) {
-                  setStep(3);
-                }
-              },
+            },
+            {
+              serial: 4,
+              id: 4,
+              title: "Confirm Payment",
             },
           ]}
           currentStep={step}
@@ -197,6 +141,13 @@ const Page = () => {
         )}
         {step === 3 && (
           <CheckoutStep3
+            formData={formData}
+            handleNextStep={handleNextStep}
+            handlePrevStep={handlePrevStep}
+          />
+        )}
+        {step === 4 && (
+          <PaymentStep4
             formData={formData}
             handleNextStep={handleNextStep}
             handlePrevStep={handlePrevStep}
