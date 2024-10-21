@@ -34,7 +34,7 @@ const CartItemsCard = ({ item, setIsUpdating, handleChecked, checked }) => {
         }
       })
       .catch((err) => {
-        errorHandler(err, setIsDeleteLoading);
+        errorHandler({ err, setLoading: setIsDeleteLoading });
       });
   };
 
@@ -61,7 +61,7 @@ const CartItemsCard = ({ item, setIsUpdating, handleChecked, checked }) => {
         setIsUpdating(Math.random());
       })
       .catch((err) => {
-        errorHandler(err);
+        errorHandler({ err, setLoading: setIsUpdating });
       });
   };
 

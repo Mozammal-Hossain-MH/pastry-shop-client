@@ -15,5 +15,13 @@ export const errorHandler = ({ err, setLoading }) => {
         text={`Your access is forbidden to perform this action`}
       />
     ));
+  } else if (err?.response?.status === 500) {
+    toast.custom((t) => (
+      <CustomToaster
+        t={t}
+        type={"error"}
+        text={`Something went wrong. Please call the customer care`}
+      />
+    ));
   }
 };

@@ -50,7 +50,7 @@ const Page = () => {
       .catch((err) => {
         setIsOrderLoading(false);
         console.log({ err });
-        errorHandler({ err, isLoading: setIsOrderLoading });
+        errorHandler({ err, setLoading: setIsOrderLoading });
       });
   }, [isUpdating]);
 

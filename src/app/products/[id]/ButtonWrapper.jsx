@@ -48,7 +48,7 @@ const ButtonWrapper = ({ text, id }) => {
             })
             .catch((err) => {
               setIsAddingToCart(false);
-              errorHandler(err, setIsAddingToCart);
+              errorHandler({ err, setLoading: setIsAddingToCart });
             });
         }
       })

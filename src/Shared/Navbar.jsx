@@ -8,6 +8,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { OutsideClickHandler } from "./OutsideClickHandler";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { CgShoppingCart } from "react-icons/cg";
 
 const Navbar = () => {
   const { user, logout } = useAuthContext();
@@ -88,6 +89,13 @@ const Navbar = () => {
       permission: true,
       Children: [
         {
+          id: 7,
+          name: "Admin Dashboard",
+          path: "/admin/dashboard",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
+        {
           id: 1,
           name: "Products",
           path: "/admin/all-products",
@@ -102,9 +110,16 @@ const Navbar = () => {
           handler: handleCloseMenu,
         },
         {
-          id: 2,
+          id: 6,
           name: "Orders",
           path: "/admin/orders",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
+        {
+          id: 5,
+          name: "Users",
+          path: "/admin/users",
           // Icon: <Tag className="h-4 w-4" />,
           handler: handleCloseMenu,
         },
@@ -119,13 +134,6 @@ const Navbar = () => {
           id: 4,
           name: "FAQ",
           path: "/admin/faq",
-          // Icon: <Tag className="h-4 w-4" />,
-          handler: handleCloseMenu,
-        },
-        {
-          id: 5,
-          name: "Users",
-          path: "/admin/users",
           // Icon: <Tag className="h-4 w-4" />,
           handler: handleCloseMenu,
         },
@@ -202,6 +210,14 @@ const Navbar = () => {
             </ul>
           </div>
           <div className={`flex items-center gap-6`}>
+            <div
+              onClick={() =>
+                user ? router.push("/cart") : router.push("/login")
+              }
+              className={`p-3 rounded-full bg-transparent cursor-pointer`}
+            >
+              <CgShoppingCart className={`text-2xl font-bold text-primary`} />
+            </div>
             {user ? (
               <button
                 data-tip={`Sign Out`}
@@ -325,6 +341,7 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
+
                 {user ? (
                   <button
                     onClick={logout}

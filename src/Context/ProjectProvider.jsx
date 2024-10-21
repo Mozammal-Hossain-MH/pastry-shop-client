@@ -3,6 +3,7 @@ import { getUser } from "@/apis/auth";
 import CreateAndUpdateProduct from "@/app/admin/all-products/CreateAndUpdateProduct";
 import ViewProduct from "@/app/admin/all-products/ViewProduct";
 import CreateAndUpdateCategory from "@/app/admin/categories/CreateAndUpdateCategory";
+import CreateAndUpdateDiscountCode from "@/app/admin/dashboard/CreateAndUpdateDiscountCode";
 import CreateAndUpdateFaq from "@/app/admin/faq/CreateAndUpdateFaq";
 import ViewOrder from "@/app/admin/orders/ViewOrder";
 import ViewUser from "@/app/admin/users/ViewUser";
@@ -159,6 +160,9 @@ const ProjectProvider = ({ children }) => {
             {popupOption?.type === "faq" && <CreateAndUpdateFaq />}
             {popupOption?.type === "viewUser" && <ViewUser />}
             {popupOption?.type === "viewOrder" && <ViewOrder />}
+            {popupOption?.type === "discountCode" && (
+              <CreateAndUpdateDiscountCode />
+            )}
           </>
         }
       />

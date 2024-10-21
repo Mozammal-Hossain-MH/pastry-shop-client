@@ -1,6 +1,5 @@
 "use client";
 import { deleteCategory, getAllCategories } from "@/apis/categories";
-import { deleteProduct, getAllProducts } from "@/apis/products";
 import { usePopupContext } from "@/Context/ProjectProvider";
 import Button from "@/Shared/Button";
 import CustomLoading from "@/Shared/CustomLoading";
@@ -10,7 +9,6 @@ import SplitDescription from "@/Shared/SplitDescription";
 import Table from "@/Shared/Table";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
 import { deleteData } from "@/Utils/deleteData";
-import { getFullImageLink } from "@/Utils/getFullImageLink";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiFillEye } from "react-icons/ai";
@@ -67,24 +65,13 @@ const Page = () => {
     });
   };
 
-  // HANDLE VIEW
-  const handleView = (data) => {
-    setPopupOption({
-      ...popupOption,
-      open: true,
-      type: "viewProduct",
-      title: "Product Details",
-      data: data,
-    });
-  };
-
   // HANDLE CREATE
   const handleCreate = () => {
     setPopupOption({
       ...popupOption,
       open: true,
       type: "category",
-      title: "Add New Product",
+      title: "Add New Category",
       setIsUpdating: setIsUpdating,
     });
   };
@@ -94,7 +81,7 @@ const Page = () => {
       ...popupOption,
       open: true,
       type: "category",
-      title: "Edit Product",
+      title: "Edit Category",
       data: data,
       setIsUpdating: setIsUpdating,
     });
@@ -102,14 +89,6 @@ const Page = () => {
 
   // ALL ACTION BUTTONS
   const [actions, setActions] = useState([
-    {
-      name: "view",
-      handler: handleView,
-      Icon: AiFillEye,
-      colorClass: "text-red-600",
-      backgroundColorClass: "bg-red-200",
-      disabledOn: [],
-    },
     {
       name: "edit",
       handler: handleEdit,

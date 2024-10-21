@@ -28,7 +28,7 @@ const CategorySection = ({ tabs }) => {
       .catch((err) => {
         setIsCategoryLoading(false);
         console.log({ err });
-        errorHandler({ err, isLoading: isCategoryLoading });
+        errorHandler({ err, isLoading: setIsCategoryLoading });
       });
   }, [activeTab]);
 

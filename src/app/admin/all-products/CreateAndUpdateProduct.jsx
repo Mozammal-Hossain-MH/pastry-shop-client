@@ -29,12 +29,14 @@ const CreateAndUpdateProduct = () => {
     images: popupOption?.data ? popupOption?.data?.images : [],
   });
 
+  console.log({ formData });
+
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
       category: popupOption?.data?.category,
     }));
-  }, [popupOption?.data?.category, formData?.category]);
+  }, [popupOption?.data?.category]);
   const [filesToUpload, setFilesToUpload] = useState([]);
   const [localImage, setLocalImage] = useState(
     popupOption?.data
@@ -61,7 +63,7 @@ const CreateAndUpdateProduct = () => {
       .catch((err) => {
         setIsCategoryLoading(false);
         console.log({ err });
-        errorHandler({ err, isLoading: isCategoryLoading });
+        errorHandler({ err, setLoading: setIsCategoryLoading });
       });
   }, []);
   const options = data?.data?.map((category) => ({

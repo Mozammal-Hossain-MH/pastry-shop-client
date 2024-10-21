@@ -45,7 +45,7 @@ const Page = () => {
       .catch((err) => {
         setIsOrderLoading(false);
         console.log({ err });
-        errorHandler({ err, isLoading: setIsOrderLoading });
+        errorHandler({ err, setLoading: setIsOrderLoading });
       });
   }, [isUpdating]);
 
@@ -138,7 +138,7 @@ const Page = () => {
         }
       })
       .catch((err) => {
-        errorHandler({ err, isLoading: isStatusChanging });
+        errorHandler({ err, setLoading: isStatusChanging });
       });
   };
   const handleCancelBookingModal = () => {

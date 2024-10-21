@@ -74,7 +74,7 @@ const ProductCard = ({ product }) => {
             })
             .catch((err) => {
               setIsAddingToCart(false);
-              errorHandler(err, setIsAddingToCart);
+              errorHandler({ err, setLoading: setIsAddingToCart });
             });
         }
       })

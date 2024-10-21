@@ -5,11 +5,12 @@ const Button = ({
   text,
   icon = true,
   paddings = "px-5 py-3",
+  parentClasses = "inline-block",
   handler,
   isLoading = false,
 }) => {
   return (
-    <div className="inline-block group">
+    <div className={`${parentClasses} group`}>
       <button
         onClick={handler}
         className={`text-primary border border-primary ${paddings} rounded-full flex items-center gap-2 group-hover:border-base-300 transition-[border]`}
