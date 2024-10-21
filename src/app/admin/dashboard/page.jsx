@@ -60,7 +60,7 @@ const Page = () => {
             </h2>{" "}
           </div>
           <p className={`text-gray-500 text-[16px]`}>
-            Take a look what's going on.
+            Take a look {"what's"} going on.
           </p>
         </div>
 
