@@ -20,7 +20,9 @@ export default function PaymentStep4({ formData }) {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/carts/payment/config`)
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/carts/payment/config`, {
+        withCredentials: true,
+      })
       .then(async (res) => {
         const publishableKey = await res.data.publishableKey;
         setStripePromise(loadStripe(publishableKey));
@@ -31,7 +33,8 @@ export default function PaymentStep4({ formData }) {
     axios
       .post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/carts/payment/create-payment-intent`,
-        { price: checkoutTotal }
+        { price: checkoutTotal },
+        { withCredentials: true }
       )
       .then(async (res) => {
         const clientSecret = await res.data.clientSecret;

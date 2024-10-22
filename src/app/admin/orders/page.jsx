@@ -1,6 +1,7 @@
 "use client";
 import { getAllCheckoutsForAdmin, updateStatus } from "@/apis/carts";
 import { usePopupContext } from "@/Context/ProjectProvider";
+import AdminRoute from "@/Routes/AdminRoute";
 import ButtonLoading from "@/Shared/ButtonLoading";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
@@ -149,109 +150,115 @@ const Page = () => {
     return <CustomLoading />;
   }
   return (
-    <div
-      className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
-    >
-      <dialog
-        id="dialog_status_change"
-        className="modal modal-bottom md:modal-middle "
+    <AdminRoute>
+      <div
+        className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
       >
-        <div
-          className={`w-[300px] px-5 py-12 rounded-lg h-auto bg-secondary relative space-y-3`}
+        <dialog
+          id="dialog_status_change"
+          className="modal modal-bottom md:modal-middle "
         >
-          <button
-            onClick={handleCancelBookingModal}
-            className="w-9 h-9 rounded-full bg-secondary border-primary flex justify-center items-center absolute top-3 right-3"
+          <div
+            className={`w-[300px] px-5 py-12 rounded-lg h-auto bg-secondary relative space-y-3`}
           >
-            <FiX className="text-primary text-xl" />
-          </button>
-          {["pending", "processing", "shipped"]?.map((status, i) => (
-            <div
-              key={i}
-              onClick={() => handleChangeStatus(status)}
-              className={`py-3 font-bold ${
-                status === "pending"
-                  ? "bg-primary"
-                  : status === "processing"
-                  ? "bg-lime-500"
-                  : "bg-green-500"
-              } text-base-300 border border-primary rounded-lg cursor-pointer transition-all active:scale-90 flex justify-center items-center`}
+            <button
+              onClick={handleCancelBookingModal}
+              className="w-9 h-9 rounded-full bg-secondary border-primary flex justify-center items-center absolute top-3 right-3"
             >
-              <p>{isStatusChanging ? <ButtonLoading /> : formatRole(status)}</p>
-            </div>
-          ))}
-        </div>
-      </dialog>
-      <TableComponentHeading
-        routes={
-          <div className={`text-[14px]`}>
-            <span
-              onClick={() => router.push("/")}
-              className={`text-primary cursor-pointer`}
-            >
-              Home
-            </span>{" "}
-            {"//"} <span>All Orders</span>
-          </div>
-        }
-        heading={"Orders"}
-      />
-      {/* HEADING AREA */}
-      <div className={`flex justify-between items-center`}>
-        <div>
-          <Heading isSubHeading={false} isWave={false} heading={"All Orders"} />
-          <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "Orders" : "Order"} Found
-          </p>
-        </div>
-      </div>
-      {/* TABLE AREA */}
-      <div className={`space-y-10`}>
-        <Table
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-          itemsPerPage={filters?.perPage}
-          totalItems={data?.total}
-          setPageNo={(data) => setFilters({ ...filters, page: data })}
-          setPerPage={setPerPage}
-          perPage={filters?.perPage}
-          isLoading={isOrderLoading}
-          rows={data?.data?.map((d, i) => ({
-            ...d,
-            count: (filters?.page - 1) * filters?.perPage + i + 1,
-            paymentMethod_table: formatRole(d?.paymentMethod),
-            status_table: (
+              <FiX className="text-primary text-xl" />
+            </button>
+            {["pending", "processing", "shipped"]?.map((status, i) => (
               <div
-                onClick={() => handleOpenModal(d?.id)}
-                className={`px-3 py-1 font-bold cursor-pointer rounded-full inline-block ${
-                  d?.status === "pending"
+                key={i}
+                onClick={() => handleChangeStatus(status)}
+                className={`py-3 font-bold ${
+                  status === "pending"
                     ? "bg-primary"
-                    : d?.status === "processing"
+                    : status === "processing"
                     ? "bg-lime-500"
                     : "bg-green-500"
-                }  shadow-lg shadow-base-100  text-base-300 capitalize flex justify-center items-center`}
+                } text-base-300 border border-primary rounded-lg cursor-pointer transition-all active:scale-90 flex justify-center items-center`}
               >
-                {d?.status}
+                <p>{formatRole(status)}</p>
               </div>
-            ),
-            //   isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
-            //     <ButtonLoading />
-            //   ) : (
+            ))}
+          </div>
+        </dialog>
+        <TableComponentHeading
+          routes={
+            <div className={`text-[14px]`}>
+              <span
+                onClick={() => router.push("/")}
+                className={`text-primary cursor-pointer`}
+              >
+                Home
+              </span>{" "}
+              {"//"} <span>All Orders</span>
+            </div>
+          }
+          heading={"Orders"}
+        />
+        {/* HEADING AREA */}
+        <div className={`flex justify-between items-center`}>
+          <div>
+            <Heading
+              isSubHeading={false}
+              isWave={false}
+              heading={"All Orders"}
+            />
+            <p className={``}>
+              Total {data?.total} {data?.total > 1 ? "Orders" : "Order"} Found
+            </p>
+          </div>
+        </div>
+        {/* TABLE AREA */}
+        <div className={`space-y-10`}>
+          <Table
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+            itemsPerPage={filters?.perPage}
+            totalItems={data?.total}
+            setPageNo={(data) => setFilters({ ...filters, page: data })}
+            setPerPage={setPerPage}
+            perPage={filters?.perPage}
+            isLoading={isOrderLoading}
+            rows={data?.data?.map((d, i) => ({
+              ...d,
+              count: (filters?.page - 1) * filters?.perPage + i + 1,
+              paymentMethod_table: formatRole(d?.paymentMethod),
+              status_table: (
+                <div
+                  onClick={() => handleOpenModal(d?.id)}
+                  className={`px-3 py-1 font-bold cursor-pointer rounded-full inline-block ${
+                    d?.status === "pending"
+                      ? "bg-primary"
+                      : d?.status === "processing"
+                      ? "bg-lime-500"
+                      : "bg-green-500"
+                  }  shadow-lg shadow-base-100  text-base-300 capitalize flex justify-center items-center`}
+                >
+                  {d?.status}
+                </div>
+              ),
+              //   isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
+              //     <ButtonLoading />
+              //   ) : (
 
-            //   ),
-          }))}
-          actions={actions}
-          cols={cols}
-          getFullDataToActionHandler
-        />
-        {/* PAGINATION */}
-        <Pagination
-          setFilters={setFilters}
-          filters={filters}
-          total={data?.total}
-        />
+              //   ),
+            }))}
+            actions={actions}
+            cols={cols}
+            getFullDataToActionHandler
+          />
+          {/* PAGINATION */}
+          <Pagination
+            setFilters={setFilters}
+            filters={filters}
+            total={data?.total}
+          />
+        </div>
       </div>
-    </div>
+    </AdminRoute>
   );
 };
 

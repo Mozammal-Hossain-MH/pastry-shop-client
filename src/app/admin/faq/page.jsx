@@ -1,6 +1,7 @@
 "use client";
 import { deleteFaq, getAllFaqs } from "@/apis/faqs";
 import { usePopupContext } from "@/Context/ProjectProvider";
+import AdminRoute from "@/Routes/AdminRoute";
 import Button from "@/Shared/Button";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
@@ -135,54 +136,56 @@ const Page = () => {
     return <CustomLoading />;
   }
   return (
-    <div
-      className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
-    >
-      <TableComponentHeading
-        routes={
-          <div className={`text-[14px]`}>
-            <span
-              onClick={() => router.push("/")}
-              className={`text-primary cursor-pointer`}
-            >
-              Home
-            </span>{" "}
-            {"//"} <span>All FAQ</span>
-          </div>
-        }
-        heading={"FAQS"}
-      />
-      {/* HEADING AREA */}
-      <div className={`flex justify-between items-center`}>
-        <div>
-          <Heading isSubHeading={false} isWave={false} heading={"All FAQ"} />
-          <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "FAQS" : "FAQ"} Found
-          </p>
-        </div>
-        <Button text={"Add"} handler={handleCreate} />
-      </div>
-      {/* TABLE AREA */}
-      <div className={`space-y-10`}>
-        <Table
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-          itemsPerPage={filters?.perPage}
-          totalItems={data?.total}
-          setPageNo={(data) => setFilters({ ...filters, page: data })}
-          setPerPage={setPerPage}
-          perPage={filters?.perPage}
-          isLoading={isFaqLoading}
-          rows={data?.data?.map((d, i) => ({
-            ...d,
-            count: (filters?.page - 1) * filters?.perPage + i + 1,
-          }))}
-          actions={actions}
-          cols={cols}
-          getFullDataToActionHandler
+    <AdminRoute>
+      <div
+        className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
+      >
+        <TableComponentHeading
+          routes={
+            <div className={`text-[14px]`}>
+              <span
+                onClick={() => router.push("/")}
+                className={`text-primary cursor-pointer`}
+              >
+                Home
+              </span>{" "}
+              {"//"} <span>All FAQ</span>
+            </div>
+          }
+          heading={"FAQS"}
         />
+        {/* HEADING AREA */}
+        <div className={`flex justify-between items-center`}>
+          <div>
+            <Heading isSubHeading={false} isWave={false} heading={"All FAQ"} />
+            <p className={``}>
+              Total {data?.total} {data?.total > 1 ? "FAQS" : "FAQ"} Found
+            </p>
+          </div>
+          <Button text={"Add"} handler={handleCreate} />
+        </div>
+        {/* TABLE AREA */}
+        <div className={`space-y-10`}>
+          <Table
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+            itemsPerPage={filters?.perPage}
+            totalItems={data?.total}
+            setPageNo={(data) => setFilters({ ...filters, page: data })}
+            setPerPage={setPerPage}
+            perPage={filters?.perPage}
+            isLoading={isFaqLoading}
+            rows={data?.data?.map((d, i) => ({
+              ...d,
+              count: (filters?.page - 1) * filters?.perPage + i + 1,
+            }))}
+            actions={actions}
+            cols={cols}
+            getFullDataToActionHandler
+          />
+        </div>
       </div>
-    </div>
+    </AdminRoute>
   );
 };
 

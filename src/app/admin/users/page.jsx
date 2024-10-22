@@ -2,6 +2,7 @@
 import { getAllUsers, updateUser } from "@/apis/auth";
 import { deleteFaq, getAllFaqs } from "@/apis/faqs";
 import { usePopupContext } from "@/Context/ProjectProvider";
+import AdminRoute from "@/Routes/AdminRoute";
 import Button from "@/Shared/Button";
 import ButtonLoading from "@/Shared/ButtonLoading";
 import CustomLoading from "@/Shared/CustomLoading";
@@ -198,73 +199,75 @@ const Page = () => {
     return <CustomLoading />;
   }
   return (
-    <div
-      className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
-    >
-      <TableComponentHeading
-        routes={
-          <div className={`text-[14px]`}>
-            <span
-              onClick={() => router.push("/")}
-              className={`text-primary cursor-pointer`}
-            >
-              Home
-            </span>{" "}
-            {"//"} <span>All Users</span>
+    <AdminRoute>
+      <div
+        className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
+      >
+        <TableComponentHeading
+          routes={
+            <div className={`text-[14px]`}>
+              <span
+                onClick={() => router.push("/")}
+                className={`text-primary cursor-pointer`}
+              >
+                Home
+              </span>{" "}
+              {"//"} <span>All Users</span>
+            </div>
+          }
+          heading={"Users"}
+        />
+        {/* HEADING AREA */}
+        <div className={`flex justify-between items-center`}>
+          <div>
+            <Heading isSubHeading={false} isWave={false} heading={"All User"} />
+            <p className={``}>
+              Total {data?.total} {data?.total > 1 ? "Users" : "User"} Found
+            </p>
           </div>
-        }
-        heading={"Users"}
-      />
-      {/* HEADING AREA */}
-      <div className={`flex justify-between items-center`}>
-        <div>
-          <Heading isSubHeading={false} isWave={false} heading={"All User"} />
-          <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "Users" : "User"} Found
-          </p>
+        </div>
+        {/* TABLE AREA */}
+        <div className={`space-y-10`}>
+          <Table
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+            itemsPerPage={filters?.perPage}
+            totalItems={data?.total}
+            setPageNo={(data) => setFilters({ ...filters, page: data })}
+            setPerPage={setPerPage}
+            perPage={filters?.perPage}
+            isLoading={isUserLoading}
+            rows={data?.data?.map((d, i) => ({
+              ...d,
+              count: (filters?.page - 1) * filters?.perPage + i + 1,
+              verified: d?.isVerified ? "Yes" : "No",
+              user_role:
+                isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
+                  <ButtonLoading />
+                ) : (
+                  <div
+                    onClick={() => handleChangeRole(d)}
+                    className={`px-3 py-1 font-bold cursor-pointer rounded-full inline-block ${
+                      d?.role === "admin" ? "bg-green-500" : "bg-primary"
+                    }  shadow-lg shadow-base-100  text-base-300 capitalize`}
+                  >
+                    {d?.role}
+                  </div>
+                ),
+            }))}
+            actions={actions}
+            cols={cols}
+            getFullDataToActionHandler
+          />
+          {/* PAGINATION */}
+          <Pagination
+            setFilters={setFilters}
+            filters={filters}
+            total={data?.total}
+          />
         </div>
       </div>
-      {/* TABLE AREA */}
-      <div className={`space-y-10`}>
-        <Table
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-          itemsPerPage={filters?.perPage}
-          totalItems={data?.total}
-          setPageNo={(data) => setFilters({ ...filters, page: data })}
-          setPerPage={setPerPage}
-          perPage={filters?.perPage}
-          isLoading={isUserLoading}
-          rows={data?.data?.map((d, i) => ({
-            ...d,
-            count: (filters?.page - 1) * filters?.perPage + i + 1,
-            verified: d?.isVerified ? "Yes" : "No",
-            user_role:
-              isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
-                <ButtonLoading />
-              ) : (
-                <div
-                  onClick={() => handleChangeRole(d)}
-                  className={`px-3 py-1 font-bold cursor-pointer rounded-full inline-block ${
-                    d?.role === "admin" ? "bg-green-500" : "bg-primary"
-                  }  shadow-lg shadow-base-100  text-base-300 capitalize flex justify-center items-center`}
-                >
-                  {d?.role}
-                </div>
-              ),
-          }))}
-          actions={actions}
-          cols={cols}
-          getFullDataToActionHandler
-        />
-        {/* PAGINATION */}
-        <Pagination
-          setFilters={setFilters}
-          filters={filters}
-          total={data?.total}
-        />
-      </div>
-    </div>
+    </AdminRoute>
   );
 };
 

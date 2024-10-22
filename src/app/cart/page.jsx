@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CartItemsCard from "./CartItemsCard";
+import PrivateRoute from "@/Routes/PrivateRoute";
 
 const Page = () => {
   const {
@@ -76,56 +77,59 @@ const Page = () => {
   };
 
   return (
-    <div className={`flex flex-col gap-20 mb-60`}>
-      <FixedBgComponent
-        url="/chocolate_bg.jpg"
-        wrapperClass={`pt-60 pb-40`}
-        component={
-          <TableComponentHeading
-            routes={
-              <div className={`text-[14px]`}>
-                <span className={`text-primary cursor-pointer`}>
-                  <NavigateComponent text="Home" route="/" />
-                </span>{" "}
-                {"//"} <span>Cart</span>
-              </div>
-            }
-            heading={"Cart"}
-          />
-        }
-      />
-      {data?.data?.length > 0 ? (
-        <div
-          className={`grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-6 w-full px-5 md:px-10`}
-        >
-          <div className={`flex flex-col gap-5 mx-auto md:col-span-2 w-full`}>
-            {data?.data?.map((item) => (
-              <CartItemsCard
-                key={item?.id}
-                item={item}
-                setIsUpdating={setIsUpdating}
-                handleChecked={handleChecked}
-                checked={checkedId}
-              />
-            ))}
-          </div>
-          <div className={`flex flex-col gap-3`}>
-            <h1 className={`text-[20px] font-black`}>Selected for checkout</h1>
-            <h1 className={`font-medium text-body-sub`}>
-              Quantity: {checkoutQuantity}
-            </h1>
-            <h1 className={`font-medium text-body-sub`}>
-              Total: ${checkoutTotal.toFixed(2)}
-            </h1>
-            {Location ? (
-              <h1 className={`font-medium text-body-sub`}>
-                {/* Delivery Charge: {Location === "Inside Dhaka" ? 60 : 130} */}
+    <PrivateRoute>
+      <div className={`flex flex-col gap-20 mb-60`}>
+        <FixedBgComponent
+          url="/chocolate_bg.jpg"
+          wrapperClass={`pt-60 pb-40`}
+          component={
+            <TableComponentHeading
+              routes={
+                <div className={`text-[14px]`}>
+                  <span className={`text-primary cursor-pointer`}>
+                    <NavigateComponent text="Home" route="/" />
+                  </span>{" "}
+                  {"//"} <span>Cart</span>
+                </div>
+              }
+              heading={"Cart"}
+            />
+          }
+        />
+        {data?.data?.length > 0 ? (
+          <div
+            className={`grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-6 w-full px-5 md:px-10`}
+          >
+            <div className={`flex flex-col gap-5 mx-auto md:col-span-2 w-full`}>
+              {data?.data?.map((item) => (
+                <CartItemsCard
+                  key={item?.id}
+                  item={item}
+                  setIsUpdating={setIsUpdating}
+                  handleChecked={handleChecked}
+                  checked={checkedId}
+                />
+              ))}
+            </div>
+            <div className={`flex flex-col gap-3`}>
+              <h1 className={`text-[20px] font-black`}>
+                Selected for checkout
               </h1>
-            ) : (
-              ""
-            )}
+              <h1 className={`font-medium text-body-sub`}>
+                Quantity: {checkoutQuantity}
+              </h1>
+              <h1 className={`font-medium text-body-sub`}>
+                Total: ${checkoutTotal.toFixed(2)}
+              </h1>
+              {Location ? (
+                <h1 className={`font-medium text-body-sub`}>
+                  {/* Delivery Charge: {Location === "Inside Dhaka" ? 60 : 130} */}
+                </h1>
+              ) : (
+                ""
+              )}
 
-            {/* <CustomMultiSelect
+              {/* <CustomMultiSelect
               error={!Location && "Location is required"}
               // loading={isPending}
               options={[
@@ -142,32 +146,33 @@ const Page = () => {
                 setLocation(e[0]?.label || null);
               }}
             /> */}
-            <Button text={"Proceed Checkout"} handler={handleCheckout} />
-          </div>
-        </div>
-      ) : (
-        <div className={`flex flex-col justify-center items-center`}>
-          {/* <img className={`w-[500px] min-w-[280px]`} src={emptyCart} alt="" /> */}
-          <div className={`flex flex-col gap-2`}>
-            <p
-              className={`text-center font-bold text-[20px] text-heading-main`}
-            >
-              Your cart is empty
-            </p>
-            <p className={`font-medium text-[14px] text-body-sub mb-3`}>
-              Looks like you {"haven't"} added anything to your cart. Go ahead
-              and explore shop
-            </p>
-            <div className={`flex justify-center items-center`}>
-              <Button
-                text={"Go To Shop"}
-                handler={() => router.push("/products")}
-              />
+              <Button text={"Proceed Checkout"} handler={handleCheckout} />
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        ) : (
+          <div className={`flex flex-col justify-center items-center`}>
+            {/* <img className={`w-[500px] min-w-[280px]`} src={emptyCart} alt="" /> */}
+            <div className={`flex flex-col gap-2`}>
+              <p
+                className={`text-center font-bold text-[20px] text-heading-main`}
+              >
+                Your cart is empty
+              </p>
+              <p className={`font-medium text-[14px] text-body-sub mb-3`}>
+                Looks like you {"haven't"} added anything to your cart. Go ahead
+                and explore shop
+              </p>
+              <div className={`flex justify-center items-center`}>
+                <Button
+                  text={"Go To Shop"}
+                  handler={() => router.push("/products")}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </PrivateRoute>
   );
 };
 

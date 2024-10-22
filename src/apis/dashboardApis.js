@@ -6,7 +6,8 @@ import axios from "axios";
 export const getAllAdminDashboardItems = async () => {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/admin`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/admin`,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {
@@ -17,7 +18,8 @@ export const getAllAdminDashboardItems = async () => {
 export const getAllUserDashboardItems = async ({ email }) => {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/user/${email}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard/user/${email}`,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {

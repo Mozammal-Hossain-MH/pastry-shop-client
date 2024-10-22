@@ -5,6 +5,7 @@ import {
   updateStatus,
 } from "@/apis/carts";
 import { useAuthContext, usePopupContext } from "@/Context/ProjectProvider";
+import PrivateRoute from "@/Routes/PrivateRoute";
 import ButtonLoading from "@/Shared/ButtonLoading";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
@@ -130,78 +131,84 @@ const Page = () => {
     return <CustomLoading />;
   }
   return (
-    <div
-      className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
-    >
-      <TableComponentHeading
-        routes={
-          <div className={`text-[14px]`}>
-            <span
-              onClick={() => router.push("/")}
-              className={`text-primary cursor-pointer`}
-            >
-              Home
-            </span>{" "}
-            {"//"} <span>All Orders</span>
+    <PrivateRoute>
+      <div
+        className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
+      >
+        <TableComponentHeading
+          routes={
+            <div className={`text-[14px]`}>
+              <span
+                onClick={() => router.push("/")}
+                className={`text-primary cursor-pointer`}
+              >
+                Home
+              </span>{" "}
+              {"//"} <span>All Orders</span>
+            </div>
+          }
+          heading={"Orders"}
+        />
+        {/* HEADING AREA */}
+        <div className={`flex justify-between items-center`}>
+          <div>
+            <Heading
+              isSubHeading={false}
+              isWave={false}
+              heading={"All Orders"}
+            />
+            <p className={``}>
+              Total {data?.total} {data?.total > 1 ? "Orders" : "Order"} Found
+            </p>
           </div>
-        }
-        heading={"Orders"}
-      />
-      {/* HEADING AREA */}
-      <div className={`flex justify-between items-center`}>
-        <div>
-          <Heading isSubHeading={false} isWave={false} heading={"All Orders"} />
-          <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "Orders" : "Order"} Found
-          </p>
+        </div>
+        {/* TABLE AREA */}
+        <div className={`space-y-10`}>
+          <Table
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+            itemsPerPage={filters?.perPage}
+            totalItems={data?.total}
+            setPageNo={(data) => setFilters({ ...filters, page: data })}
+            setPerPage={setPerPage}
+            perPage={filters?.perPage}
+            isLoading={isOrderLoading}
+            rows={data?.data?.map((d, i) => ({
+              ...d,
+              count: (filters?.page - 1) * filters?.perPage + i + 1,
+              paymentMethod_table: formatRole(d?.paymentMethod),
+              status_table: (
+                <div
+                  className={`px-3 py-1 font-bold rounded-full inline-block ${
+                    d?.status === "pending"
+                      ? "bg-primary"
+                      : d?.status === "processing"
+                      ? "bg-lime-500"
+                      : "bg-green-500"
+                  }  shadow-lg shadow-base-100  text-base-300 capitalize flex justify-center items-center`}
+                >
+                  {d?.status}
+                </div>
+              ),
+              //   isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
+              //     <ButtonLoading />
+              //   ) : (
+
+              //   ),
+            }))}
+            actions={actions}
+            cols={cols}
+            getFullDataToActionHandler
+          />
+          {/* PAGINATION */}
+          <Pagination
+            setFilters={setFilters}
+            filters={filters}
+            total={data?.total}
+          />
         </div>
       </div>
-      {/* TABLE AREA */}
-      <div className={`space-y-10`}>
-        <Table
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-          itemsPerPage={filters?.perPage}
-          totalItems={data?.total}
-          setPageNo={(data) => setFilters({ ...filters, page: data })}
-          setPerPage={setPerPage}
-          perPage={filters?.perPage}
-          isLoading={isOrderLoading}
-          rows={data?.data?.map((d, i) => ({
-            ...d,
-            count: (filters?.page - 1) * filters?.perPage + i + 1,
-            paymentMethod_table: formatRole(d?.paymentMethod),
-            status_table: (
-              <div
-                className={`px-3 py-1 font-bold rounded-full inline-block ${
-                  d?.status === "pending"
-                    ? "bg-primary"
-                    : d?.status === "processing"
-                    ? "bg-lime-500"
-                    : "bg-green-500"
-                }  shadow-lg shadow-base-100  text-base-300 capitalize flex justify-center items-center`}
-              >
-                {d?.status}
-              </div>
-            ),
-            //   isChangingRole?.id === d?.id && isChangingRole?.isLoading ? (
-            //     <ButtonLoading />
-            //   ) : (
-
-            //   ),
-          }))}
-          actions={actions}
-          cols={cols}
-          getFullDataToActionHandler
-        />
-        {/* PAGINATION */}
-        <Pagination
-          setFilters={setFilters}
-          filters={filters}
-          total={data?.total}
-        />
-      </div>
-    </div>
+    </PrivateRoute>
   );
 };
 

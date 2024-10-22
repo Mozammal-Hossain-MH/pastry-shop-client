@@ -6,6 +6,7 @@ import CheckoutStep1 from "./CheckoutStep1";
 import CheckoutStep2 from "./CheckoutStep2";
 import CheckoutStep3 from "./CheckoutStep3";
 import PaymentStep4 from "./PaymentStep4";
+import PrivateRoute from "@/Routes/PrivateRoute";
 
 const Page = () => {
   const [step, setStep] = useState(1);
@@ -92,69 +93,71 @@ const Page = () => {
   };
 
   return (
-    <div
-      className={`max-w-screen-xl mx-auto px-5 md:px-10 flex flex-col justify-center items-center gap-10 pt-32 mb-60 w-full `}
-    >
-      <div className=" mb-5 w-full md:w-1/2 ">
-        <CustomMultiStepper
-          steps={[
-            {
-              serial: 1,
-              id: 1,
-              title: "Shipping Information",
-            },
-            {
-              serial: 2,
-              id: 2,
-              title: "Payment Information",
-            },
-            {
-              serial: 3,
-              id: 3,
-              title: "Order Review",
-            },
-            {
-              serial: 4,
-              id: 4,
-              title: "Confirm Payment",
-            },
-          ]}
-          currentStep={step}
-        />
+    <PrivateRoute>
+      <div
+        className={`max-w-screen-xl mx-auto px-5 md:px-10 flex flex-col justify-center items-center gap-10 pt-32 mb-60 w-full `}
+      >
+        <div className=" mb-5 w-full md:w-1/2 ">
+          <CustomMultiStepper
+            steps={[
+              {
+                serial: 1,
+                id: 1,
+                title: "Shipping Information",
+              },
+              {
+                serial: 2,
+                id: 2,
+                title: "Payment Information",
+              },
+              {
+                serial: 3,
+                id: 3,
+                title: "Order Review",
+              },
+              {
+                serial: 4,
+                id: 4,
+                title: "Confirm Payment",
+              },
+            ]}
+            currentStep={step}
+          />
+        </div>
+        <div className={`w-full`}>
+          {step === 1 && (
+            <CheckoutStep1
+              errors={errors1}
+              setErrors={setErrors1}
+              setFormData={setFormData}
+              formData={formData}
+              validateForm={validateForm1}
+              handleNextStep={handleNextStep}
+            />
+          )}
+          {step === 2 && (
+            <CheckoutStep2
+              handleNextStep={handleNextStep}
+              handlePrevStep={handlePrevStep}
+            />
+          )}
+          {step === 3 && (
+            <CheckoutStep3
+              formData={formData}
+              handleNextStep={handleNextStep}
+              handlePrevStep={handlePrevStep}
+            />
+          )}
+          {step === 4 && (
+            <PaymentStep4
+              formData={formData}
+              handleNextStep={handleNextStep}
+              handlePrevStep={handlePrevStep}
+            />
+          )}
+        </div>
       </div>
-      <div className={`w-full`}>
-        {step === 1 && (
-          <CheckoutStep1
-            errors={errors1}
-            setErrors={setErrors1}
-            setFormData={setFormData}
-            formData={formData}
-            validateForm={validateForm1}
-            handleNextStep={handleNextStep}
-          />
-        )}
-        {step === 2 && (
-          <CheckoutStep2
-            handleNextStep={handleNextStep}
-            handlePrevStep={handlePrevStep}
-          />
-        )}
-        {step === 3 && (
-          <CheckoutStep3
-            formData={formData}
-            handleNextStep={handleNextStep}
-            handlePrevStep={handlePrevStep}
-          />
-        )}
-        {step === 4 && (
-          <PaymentStep4
-            formData={formData}
-            handleNextStep={handleNextStep}
-            handlePrevStep={handlePrevStep}
-          />
-        )}
-      </div>
-    </div>
+    </PrivateRoute>
   );
 };
 

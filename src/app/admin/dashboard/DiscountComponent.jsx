@@ -101,14 +101,6 @@ const DiscountComponent = () => {
   // ALL ACTION BUTTONS
   const [actions, setActions] = useState([
     {
-      name: "view",
-      handler: handleView,
-      Icon: AiFillEye,
-      colorClass: "text-red-600",
-      backgroundColorClass: "bg-red-200",
-      disabledOn: [],
-    },
-    {
       name: "edit",
       handler: handleEdit,
       Icon: RiEdit2Fill,

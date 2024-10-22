@@ -10,7 +10,7 @@ import { MdChevronRight } from "react-icons/md";
 import { OutsideClickHandler } from "./OutsideClickHandler";
 
 const Navbar = () => {
-  const { user, logout } = useAuthContext();
+  const { user, logout, isAdmin } = useAuthContext();
   console.log({ user });
   const [sidebar, setSidebar] = useState(false);
   const router = useRouter();
@@ -67,7 +67,7 @@ const Navbar = () => {
       path: "/dashboard",
       // Icon: <ShoppingBag className="h-4 w-4" />,
       handler: handleCloseMenu,
-      permission: true,
+      permission: user,
       Children: [
         {
           id: 1,
@@ -92,7 +92,7 @@ const Navbar = () => {
       // Icon: <LayoutDashboard className="h-4 w-4" />,
       handler: handleOpenDropdown,
       path: "/admin",
-      permission: true,
+      permission: isAdmin,
       Children: [
         {
           id: 7,

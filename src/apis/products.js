@@ -17,6 +17,7 @@ export const uploadProductPic = async (files) => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       }
     );
     return res?.data;
@@ -28,7 +29,14 @@ export const uploadProductPic = async (files) => {
 // GET API
 // ----------------------------------------------------------------
 export const getAllProducts = async (filters) => {
-  const { page, perPage, category, sortByNewest, fromPrice, toPrice } = filters;
+  const {
+    page,
+    perPage,
+    category = "",
+    sortByNewest = "",
+    fromPrice = "",
+    toPrice = "",
+  } = filters;
   try {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?page=${page}&perPage=${perPage}&category=${category}&sortByNewest=${sortByNewest}&fromPrice=${fromPrice}&toPrice=${toPrice}`
@@ -96,7 +104,8 @@ export const postProduct = async (formData) => {
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`,
-      formData
+      formData,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {
@@ -110,7 +119,8 @@ export const updateProduct = async (formData) => {
   try {
     const res = await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`,
-      formData
+      formData,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {
@@ -124,7 +134,8 @@ export const updateProduct = async (formData) => {
 export const deleteProduct = async ({ id }) => {
   try {
     const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {

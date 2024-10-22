@@ -1,14 +1,13 @@
+import { getAllFaqs } from "@/apis/faqs";
 import FixedBgComponent from "@/Shared/FixedBgComponent";
+import Heading from "@/Shared/Heading";
 import TableComponentHeading from "@/Shared/TableComponentHeading";
 import NavigateComponent from "@/Utils/navigate";
 import { CiLocationOn } from "react-icons/ci";
 import { MdOutlinePhoneInTalk } from "react-icons/md";
 import { TfiEmail } from "react-icons/tfi";
-import SupportCard from "./SupportCard";
 import ContactForm from "./ContactForm";
-import Heading from "@/Shared/Heading";
-import axios from "axios";
-import { getAllFaqs } from "@/apis/faqs";
+import SupportCard from "./SupportCard";
 
 const page = async () => {
   const faqs = await getAllFaqs();

@@ -58,13 +58,16 @@ const ProjectProvider = ({ children }) => {
       .then((res) => {
         console.log({ res });
         setUser(res?.user);
+
         if (res?.user?.role === "admin") {
           setIsAdmin(true);
         } else {
           setIsAdmin(false);
         }
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log({ err });
       });
   }, [isUserComing]);

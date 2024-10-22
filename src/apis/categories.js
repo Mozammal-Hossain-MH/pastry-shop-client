@@ -21,7 +21,8 @@ export const postCategory = async (formData) => {
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`,
-      formData
+      formData,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {
@@ -35,7 +36,8 @@ export const updateCategory = async (formData) => {
   try {
     const res = await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`,
-      formData
+      formData,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {
@@ -49,7 +51,8 @@ export const updateCategory = async (formData) => {
 export const deleteCategory = async ({ id }) => {
   try {
     const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories/${id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/categories/${id}`,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {

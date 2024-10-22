@@ -12,6 +12,7 @@ const page = async ({ params }) => {
   const product = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${params?.id}`
   );
+  console.log({ productData: product?.data });
   const productByCategory = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/category/${product?.data?.data?.category}?limit=4&skip=${product?.data?.data?.id}`
   );
@@ -86,8 +87,8 @@ const page = async ({ params }) => {
               />
             </div>
             <p className={`text-[20px]`}>
-              <span className={`text-primary font-bold`}>Categories: </span>
-              <span>{product?.data?.data?.category}</span>
+              <span className={`text-primary font-bold`}>Category: </span>
+              <span>{product?.data?.data?.categoryName}</span>
             </p>
           </div>
         </div>

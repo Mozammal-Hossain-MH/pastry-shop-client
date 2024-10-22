@@ -2,6 +2,7 @@
 import { getAllCategories } from "@/apis/categories";
 import { deleteProduct, getAllProducts } from "@/apis/products";
 import { usePopupContext } from "@/Context/ProjectProvider";
+import AdminRoute from "@/Routes/AdminRoute";
 import Button from "@/Shared/Button";
 import CustomLoading from "@/Shared/CustomLoading";
 import Heading from "@/Shared/Heading";
@@ -219,89 +220,93 @@ const Page = () => {
     return <CustomLoading />;
   }
   return (
-    <div
-      className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
-    >
-      <TableComponentHeading
-        routes={
-          <div className={`text-[14px]`}>
-            <span
-              onClick={() => router.push("/")}
-              className={`text-primary cursor-pointer`}
-            >
-              Home
-            </span>{" "}
-            {"//"} <span>All Products</span>
+    <AdminRoute>
+      <div
+        className={`max-w-screen-xl mx-auto px-3 flex flex-col gap-10 pt-36 pb-40`}
+      >
+        <TableComponentHeading
+          routes={
+            <div className={`text-[14px]`}>
+              <span
+                onClick={() => router.push("/")}
+                className={`text-primary cursor-pointer`}
+              >
+                Home
+              </span>{" "}
+              {"//"} <span>All Products</span>
+            </div>
+          }
+          heading={"Products"}
+        />
+        {/* HEADING AREA */}
+        <div className={`flex justify-between items-center`}>
+          <div>
+            <Heading
+              isSubHeading={false}
+              isWave={false}
+              heading={"All Products"}
+            />
+            <p className={``}>
+              Total {data?.total} {data?.total > 1 ? "Products" : "Product"}{" "}
+              Found
+            </p>
           </div>
-        }
-        heading={"Products"}
-      />
-      {/* HEADING AREA */}
-      <div className={`flex justify-between items-center`}>
-        <div>
-          <Heading
-            isSubHeading={false}
-            isWave={false}
-            heading={"All Products"}
-          />
-          <p className={``}>
-            Total {data?.total} {data?.total > 1 ? "Products" : "Product"} Found
-          </p>
+          <Button text={"Add"} handler={handleCreate} />
         </div>
-        <Button text={"Add"} handler={handleCreate} />
+        {/* TABLE AREA */}
+        <div className={`space-y-10`}>
+          <Table
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+            itemsPerPage={filters?.perPage}
+            totalItems={data?.total}
+            setPageNo={(data) => setFilters({ ...filters, page: data })}
+            setPerPage={setPerPage}
+            perPage={filters?.perPage}
+            isLoading={isProductLoading}
+            rows={data?.data?.map((d, i) => ({
+              ...d,
+              count: (filters?.page - 1) * filters?.perPage + i + 1,
+              name: d?.name,
+              description_table: (
+                <SplitDescription text={d?.description} length={30} />
+              ),
+              image_table: (
+                <img
+                  onClick={() => handleViewImages(d?.images)}
+                  src={getFullImageLink(
+                    d?.images?.length > 0 ? d?.images[0]?.file : "",
+                    "Products"
+                  )}
+                  alt={d?.name}
+                  className={`w-16 h-16 object-cover cursor-pointer`}
+                />
+              ),
+              price: d?.price,
+              category_table: categories?.data?.find(
+                (c) => c?.id === d?.category
+              )?.name,
+              // category_table: (
+              //   <div className={`flex gap-1 capitalize`}>
+              //     {d?.category?.split("_")?.map((c, i) => (
+              //       <span key={i}>{c}</span>
+              //     ))}
+              //   </div>
+              // ),
+            }))}
+            actions={actions}
+            cols={cols}
+            getFullDataToActionHandler
+          />
+          {/* PAGINATION */}
+          <Pagination
+            setFilters={setFilters}
+            filters={filters}
+            total={data?.total}
+          />
+        </div>
       </div>
-      {/* TABLE AREA */}
-      <div className={`space-y-10`}>
-        <Table
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-          itemsPerPage={filters?.perPage}
-          totalItems={data?.total}
-          setPageNo={(data) => setFilters({ ...filters, page: data })}
-          setPerPage={setPerPage}
-          perPage={filters?.perPage}
-          isLoading={isProductLoading}
-          rows={data?.data?.map((d, i) => ({
-            ...d,
-            count: (filters?.page - 1) * filters?.perPage + i + 1,
-            name: d?.name,
-            description_table: (
-              <SplitDescription text={d?.description} length={30} />
-            ),
-            image_table: (
-              <img
-                onClick={() => handleViewImages(d?.images)}
-                src={getFullImageLink(
-                  d?.images?.length > 0 ? d?.images[0]?.file : "",
-                  "Products"
-                )}
-                alt={d?.name}
-                className={`w-16 h-16 object-cover cursor-pointer`}
-              />
-            ),
-            price: d?.price,
-            category_table: categories?.data?.find((c) => c?.id === d?.category)
-              ?.name,
-            // category_table: (
-            //   <div className={`flex gap-1 capitalize`}>
-            //     {d?.category?.split("_")?.map((c, i) => (
-            //       <span key={i}>{c}</span>
-            //     ))}
-            //   </div>
-            // ),
-          }))}
-          actions={actions}
-          cols={cols}
-          getFullDataToActionHandler
-        />
-        {/* PAGINATION */}
-        <Pagination
-          setFilters={setFilters}
-          filters={filters}
-          total={data?.total}
-        />
-      </div>
-    </div>
+    </AdminRoute>
   );
 };
 

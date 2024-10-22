@@ -100,7 +100,8 @@ export const updateUser = async (data) => {
   try {
     const res = await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/${data?.email}`,
-      data
+      data,
+      { withCredentials: true }
     );
     return res?.data;
   } catch (error) {
@@ -119,15 +120,3 @@ export const updateUserPassword = async (email, info) => {
     throw error;
   }
 };
-
-// // ----------------------------------------------------------------
-// // DELETE API
-// // ----------------------------------------------------------------
-// export const deleteCategory = async ({ id }) => {
-//   try {
-//     const res = await axiosSecure.delete(`/categories/${id}`);
-//     return res?.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
