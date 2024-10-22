@@ -11,7 +11,7 @@ const Footer = () => {
     >
       <div className={`grid grid-cols-1 md:grid-cols-2 gap-10 mx-5 md:mx-10`}>
         <div className={`space-y-10 z-10`}>
-          <img className={`w-[30px] `} src="/cremeLogo.png" alt="logo" />
+          <img className={`w-24 `} src="/cremeLogo.png" alt="logo" />
           <p className={`max-w-[400px]`}>
             Etiam consequat sem ullamcorper, euismod metus sit amet, tristique
             justo. Vestibulum mattis, nisi ut.
