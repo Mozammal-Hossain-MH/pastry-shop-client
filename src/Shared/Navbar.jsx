@@ -1,14 +1,13 @@
 "use client";
 import { useAuthContext } from "@/Context/ProjectProvider";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { CiLogin } from "react-icons/ci";
-import { FiAlignLeft, FiX } from "react-icons/fi";
-import { IoIosLogOut } from "react-icons/io";
-import { OutsideClickHandler } from "./OutsideClickHandler";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { CgShoppingCart } from "react-icons/cg";
+import { FiAlignLeft, FiX } from "react-icons/fi";
+import { MdChevronRight } from "react-icons/md";
+import { OutsideClickHandler } from "./OutsideClickHandler";
 
 const Navbar = () => {
   const { user, logout } = useAuthContext();
@@ -64,7 +63,7 @@ const Navbar = () => {
     },
     {
       id: 3,
-      name: "Dashboard",
+      name: "Account",
       path: "/dashboard",
       // Icon: <ShoppingBag className="h-4 w-4" />,
       handler: handleCloseMenu,
@@ -72,6 +71,13 @@ const Navbar = () => {
       Children: [
         {
           id: 1,
+          name: "Dashboard",
+          path: "/dashboard/my-account",
+          // Icon: <Tag className="h-4 w-4" />,
+          handler: handleCloseMenu,
+        },
+        {
+          id: 2,
           name: "My Orders",
           path: "/dashboard/order-history",
           // Icon: <Tag className="h-4 w-4" />,
@@ -430,7 +436,7 @@ function NavItemWithChildren({
           animate={{ rotate: isExpanded === label ? 180 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          {/* <ChevronRight className="h-4 w-4" /> */}
+          <MdChevronRight className="h-4 w-4" />
         </motion.span>
       </button>
       <AnimatePresence initial={false}>

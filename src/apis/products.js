@@ -28,16 +28,28 @@ export const uploadProductPic = async (files) => {
 // GET API
 // ----------------------------------------------------------------
 export const getAllProducts = async (filters) => {
-  const { page, perPage } = filters;
+  const { page, perPage, category, sortByNewest, fromPrice, toPrice } = filters;
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?page=${page}&perPage=${perPage}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?page=${page}&perPage=${perPage}&category=${category}&sortByNewest=${sortByNewest}&fromPrice=${fromPrice}&toPrice=${toPrice}`
     );
     return res?.data;
   } catch (error) {
     throw error;
   }
 };
+
+export const getFilterData = async () => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/price-range`
+    );
+    return res?.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAllIdAndNameOfProducts = async () => {
   try {
     const res = await axios.get(

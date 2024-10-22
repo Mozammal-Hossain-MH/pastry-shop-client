@@ -80,7 +80,6 @@ const ProductCard = ({ product }) => {
       })
       .catch((err) => {
         setIsAddingToCart(false);
-        console.log({ err });
       });
   };
   return (
@@ -94,7 +93,6 @@ const ProductCard = ({ product }) => {
         // style={{ backgroundImage: `url(/dots.png)` }}
         className="overflow-hidden rotating-background"
       >
-        {console.log({ product })}
         <img
           className="jump-image"
           src={getFullImageLink(
@@ -137,17 +135,17 @@ const ProductCard = ({ product }) => {
         <div className="flex justify-center items-center gap-2">
           <p
             className={`${
-              product?.offerPrice ? "text-base-200" : "text-primary"
+              product?.discountPrice ? "text-base-200" : "text-primary"
             }`}
           >
             ${product?.regularPrice}
           </p>
-          {product?.offerPrice && (
-            <p className={`text-red-500`}>${product?.offerPrice}</p>
+          {product?.discountPrice && (
+            <p className={`text-red-500`}>${product?.discountPrice}</p>
           )}
         </div>
       </motion.div>
-      {product?.offerPrice && (
+      {product?.discountPrice && (
         <div
           className={`bg-red-500 w-10 h-10 rounded-full text-base-300 font-medium absolute top-3 right-3 flex justify-center items-center text-[12px]`}
         >

@@ -87,7 +87,7 @@ const page = async ({ params }) => {
             </div>
             <p className={`text-[20px]`}>
               <span className={`text-primary font-bold`}>Categories: </span>
-              <span>{formatRole(product?.data?.data?.category)}</span>
+              <span>{product?.data?.data?.category}</span>
             </p>
           </div>
         </div>
