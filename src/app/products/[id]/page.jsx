@@ -7,6 +7,7 @@ import axios from "axios";
 import ButtonWrapper from "./ButtonWrapper";
 import Quantity from "./Quantity";
 import ProductCard from "@/Shared/ProductCard";
+import Reviews from "./Reviews";
 
 const page = async ({ params }) => {
   const product = await axios.get(
@@ -102,6 +103,7 @@ const page = async ({ params }) => {
           </h2>
           <p>{product?.data?.data?.description}</p>
         </div>
+        <Reviews />
         <div
           className={`flex flex-col justify-center items-center gap-10 px-5 sm:px-10 pb-40`}
         >

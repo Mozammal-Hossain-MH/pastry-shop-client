@@ -7,6 +7,7 @@ import CreateAndUpdateDiscountCode from "@/app/admin/dashboard/CreateAndUpdateDi
 import CreateAndUpdateFaq from "@/app/admin/faq/CreateAndUpdateFaq";
 import ViewOrder from "@/app/admin/orders/ViewOrder";
 import ViewUser from "@/app/admin/users/ViewUser";
+import CreateAndUpdateReview from "@/app/products/[id]/CreateAndUpdateReview";
 import useAxiosSecure from "@/Hooks/useAxiosSecure";
 import CustomPopup from "@/Shared/CustomPopup";
 import FileViewer from "@/Shared/FileViewer";
@@ -166,6 +167,7 @@ const ProjectProvider = ({ children }) => {
             {popupOption?.type === "discountCode" && (
               <CreateAndUpdateDiscountCode />
             )}
+            {popupOption?.type === "review" && <CreateAndUpdateReview />}
           </>
         }
       />
