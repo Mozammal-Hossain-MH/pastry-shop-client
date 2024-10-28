@@ -121,31 +121,7 @@ const Page = () => {
               <h1 className={`font-medium text-body-sub`}>
                 Total: ${checkoutTotal.toFixed(2)}
               </h1>
-              {Location ? (
-                <h1 className={`font-medium text-body-sub`}>
-                  {/* Delivery Charge: {Location === "Inside Dhaka" ? 60 : 130} */}
-                </h1>
-              ) : (
-                ""
-              )}
 
-              {/* <CustomMultiSelect
-              error={!Location && "Location is required"}
-              // loading={isPending}
-              options={[
-                { id: 1, label: "Inside Dhaka" },
-                { id: 2, label: "Outside Dhaka" },
-              ]}
-              label={"Location"}
-              required={true}
-              singleSelect
-              // defaultSelectedValues={managers.filter(
-              //   (m) => m?.id === formData?.manager_id
-              // )}
-              onSelect={(e) => {
-                setLocation(e[0]?.label || null);
-              }}
-            /> */}
               <Button text={"Proceed Checkout"} handler={handleCheckout} />
             </div>
           </div>
